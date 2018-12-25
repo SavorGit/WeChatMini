@@ -1,0 +1,54 @@
+<!--pages/launch/video/index.wxml-->
+
+<!-- 视频上传前 -->
+<view class="container" style='display:none;'>
+  <view class='full_width flex_row_center page-top'>
+    <label>视频上传成功后，电视下载完毕开始播放</label>
+  </view>
+  <view class='full_width page-main'>
+    <video class='full_width'></video>
+
+    <!-- 上传操作前不显示，有上传动作后才显示 -->
+    <view class='full_width upload-progress'>
+      <progress active-color="rgba(28, 190, 182, 0.66)" background-color="#FFFFFF" percent="30"></progress>
+      <label class="font_932C3F_34">0%</label>
+    </view>
+
+  </view>
+  <view class='full_width page-bottom'>
+    <button class='button_1'>投屏</button>
+  </view>
+</view>
+
+
+<!-- 视频上传失败 -->
+<view class="container" style='display:none;'>
+  <view class='full_width flex_row_center page-top'>
+    <label>视频上传成功后，电视下载完毕开始播放</label>
+  </view>
+  <view class='full_width page-main'>
+    <video class='full_width'></video>
+    <view class='full_width upload-progress'>
+      <progress active-color="rgba(16, 16, 16, 0.51)" background-color="#FFFFFF" percent="30"></progress>
+      <label class="font_932C3F_34">0%</label>
+    </view>
+  </view>
+  <view class='full_width page-bottom'>
+    <button class='button_1'>重试</button>
+  </view>
+</view>
+
+
+<!-- 视频上传成功 -->
+<view class="container">
+  <view class='full_width flex_row_center page-top'>
+    <label>视频上传成功后，电视下载完毕开始播放</label>
+  </view>
+  <view class='full_width page-main'>
+    <video class='full_width'></video>
+  </view>
+  <view class='full_width page-bottom'>
+    <button class='button_2'>重选视频</button>
+    <button class='button_2' style='background-color:rgb(153, 153, 153);'>退出投屏</button>
+  </view>
+</view>
