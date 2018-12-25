@@ -1,21 +1,127 @@
 /**index.wxss**/
-.userinfo {
+
+.page-top {
+  height: 40px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(15, 37, 57);
+  font-size: 14px;
+}
+
+.page-top label {
+  font-weight: 400;
+  font-size: 16px;
+  margin-left: 20rpx;
+}
+
+.page-top button {
+  width: 76px;
+  height: 31px;
+  padding: 0rpx;
+  line-height: 31px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(28, 190, 182);
+  border-color: transparent;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.page-main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: -50rpx;
 }
 
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
+.page-main .tip {
+  height: 120rpx;
+  font-size: 30rpx;
 }
 
-.userinfo-nickname {
-  color: #aaa;
+.page-main .btn {
+  width: 565rpx;
+  height: 240rpx;
+  line-height: 240rpx;
+  margin: 25rpx 0rpx;
+  background-color: rgb(28, 190, 182);
+  border-color: transparent;
+  border-radius: 10px;
+  font-size: 14px;
+  padding: 0px;
+  text-align: center;
+  font-weight: normal;
+  font-style: normal;
 }
 
-.usermotto {
-  margin-top: 200px;
+.btn image {
+  width: 48rpx;
+  height: 38rpx;
+  margin: 0rpx 20rpx;
+  vertical-align: middle;
+}
+
+.btn label {
+  font-size: 36rpx;
+}
+
+.page-bottom {
+  height: 100rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.page-bottom image {
+  width: 48rpx;
+  height: 38rpx;
+  vertical-align: middle;
+}
+
+.wifi-tip {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  bottom: 0rpx;
+  width: 99%;
+  margin-bottom: 0.5%;
+  height: 280rpx;
+  font-size: 14px;
+  background-color: #fff;
+}
+
+.wifi-tip .wifi-ssid {
+  width: 98%;
+  height: 90rpx;
+  line-height: 90rpx;
+  padding-left: 50rpx;
+  color: rgb(16, 16, 16);
+  border-bottom: 1rpx solid rgba(187, 187, 187, 0.48);
+}
+
+.wifi-tip .wifi-pass {
+  width: 98%;
+  height: 190rpx;
+  line-height: 190rpx;
+  padding-left: 50rpx;
+  color: rgb(16, 16, 16);
+}
+
+.wifi-tip .wifi-pass button {
+  height: 190rpx;
+  line-height: 190rpx;
+  margin: 0rpx 0rpx 0rpx 50rpx;
+  padding: unset;
+  border: unset;
+  display: inline-block;
+  vertical-align: middle;
+  background: unset;
+  font-weight: 400;
+  font-size: 14px;
+  color: rgba(28, 190, 182, 1);
+  text-decoration: underline;
+}
+
+.wifi-tip .wifi-pass button::after, .wifi-tip .wifi-pass button::before {
+  border: unset;
 }
