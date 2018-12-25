@@ -1,11 +1,12 @@
 {
   "pages": [
-    "pages/launch/pic/index",
     "pages/index/index",
     "pages/logs/logs",
     "pages/launch/video/index",
     "pages/launch/video/upload_fail",
-    "pages/launch/video/upload_success"
+    "pages/launch/video/upload_success",
+    "pages/launch/pic/index",
+    "pages/launch/pic/upload_success"
   ],
   "window": {
     "backgroundTextStyle": "light",
