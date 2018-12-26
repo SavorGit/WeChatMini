@@ -1,5 +1,6 @@
 //index.js
 //获取应用实例
+const util = require('../../utils/util.js')
 const app = getApp()
 var openid;
 var box_mac;
@@ -18,161 +19,169 @@ Page({
     box_mac:'',
     wifi_name:'',
     wifi_password:'',
+    hiddens:true,
   },
  
   onLoad: function (e) {
     var that = this;
-    //box_mac = e.box_mac        //*********上线打开
+    box_mac = e.box_mac        //*********上线打开
     box_mac = '00226D655202'     //******上线去掉*/
-    that.setData({
-      box_mac:box_mac,
-    })
-    wx.hideShareMenu();
     
-    if (app.globalData.openid && app.globalData.openid != '') {
+    if (box_mac == undefined){
+      
+     
+    }else {
       that.setData({
-        openid: app.globalData.openid
+        box_mac: box_mac,
       })
-      openid = app.globalData.openid;
-      //判断用户是否注册
-      wx.request({
-        url: 'https://mobile.littlehotspot.com/smallappsimple/User/isRegister',
-        data: {
-          "openid": app.globalData.openid,
-          
-        },
-        header: {
-          'content-type': 'application/json'
-        },
-        success: function (res) {
-          wx.setStorage({
-            key: 'savor_user_info',
-            data: res.data.result.userinfo,
-          })
-        },
-        fail: function (e) {
-          wx.setStorage({
-            key: 'savor_user_info',
-            data: { 'openid': app.globalData.openid },
-          })
-        }
-      });//判断用户是否注册结束
-      //getHotelInfo(box_mac);
-      
-    } else {
-      app.openidCallback = openid => {
-        if (openid != '') {
-          that.setData({
-            openid: openid
-          })
-          openid = openid;
-          //判断用户是否注册
-          wx.request({
-            url: 'https://mobile.littlehotspot.com/smallappsimple/User/isRegister',
-            data: {
-              "openid": openid,
-              
-            },
-            header: {
-              'content-type': 'application/json'
-            },
-            success: function (res) {
-              wx.setStorage({
-                key: 'savor_user_info',
-                data: res.data.result.userinfo,
-              })
-            },
-            fail: function (e) {
-              wx.setStorage({
-                key: 'savor_user_info',
-                data: { 'openid': openid },
-              })
-            }
-          });//判断用户是否注册结束
-          
-        }
-      }
-      
-    }
-    getHotelInfo(box_mac);
-    function getHotelInfo(box_mac) {//获取链接的酒楼信息
-      wx.request({
-        url: 'https://mobile.littlehotspot.com/Smallappsimple/Index/getHotelInfo',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        data: {
-          box_mac: box_mac,
-        },
-        method: "POST",
-        success: function (res) {
-          that.setData({
-            is_link:1
-          })
-          if(res.data.code==10000){
-            var wifi_name = res.data.result.wifi_name;
-            var wifi_password = res.data.result.wifi_password;
-            var use_wifi_password = wifi_password
-            if(wifi_password==''){
-              wifi_password="未设置wifi密码";
-            }
-            that.setData({
-              hotel_name: res.data.result.hotel_name,
-              room_name: res.data.result.room_name,
-              is_link: 1,
-              wifi_name: wifi_name,
-              wifi_password: wifi_password
+      wx.hideShareMenu();
+
+      if (app.globalData.openid && app.globalData.openid != '') {
+        that.setData({
+          openid: app.globalData.openid
+        })
+        openid = app.globalData.openid;
+        //判断用户是否注册
+        wx.request({
+          url: 'https://mobile.littlehotspot.com/smallappsimple/User/isRegister',
+          data: {
+            "openid": app.globalData.openid,
+
+          },
+          header: {
+            'content-type': 'application/json'
+          },
+          success: function (res) {
+            wx.setStorage({
+              key: 'savor_user_info',
+              data: res.data.result.userinfo,
             })
-            
-            
-            wx.startWifi({
+          },
+          fail: function (e) {
+            wx.setStorage({
+              key: 'savor_user_info',
+              data: { 'openid': app.globalData.openid },
+            })
+          }
+        });//判断用户是否注册结束
+        //getHotelInfo(box_mac);
+
+      } else {
+        app.openidCallback = openid => {
+          if (openid != '') {
+            that.setData({
+              openid: openid
+            })
+            openid = openid;
+            //判断用户是否注册
+            wx.request({
+              url: 'https://mobile.littlehotspot.com/smallappsimple/User/isRegister',
+              data: {
+                "openid": openid,
+
+              },
+              header: {
+                'content-type': 'application/json'
+              },
               success: function (res) {
-                
-                wx.getWifiList({
-                  success:function(et){
-                    wx.onGetWifiList(function (ret) {
-                      var wifilist = ret.wifiList;
-                      console.log(wifilist);
-                      for (var i = 0; i < ret.wifiList.length; i++) {
-                        if(wifi_name==wifilist[i]['SSID']){
-                          console.log(wifilist[i]);
-                          wx.connectWifi({
-                            SSID: wifilist[i]['SSID'],
-                            BSSID: wifilist[i]['BSSID'],
-                            password: use_wifi_password,
-                            success: function (res) {
-                              console.log('wifi连接成功');
-                              that.setData({
-                                is_link_wifi:1,
-                                
-                              })
-                            },
-                            fail: function (res) {
-                              //console.log(res.errMsg);
-                              that.setData({
-                                is_link_wifi: 0,
-                                
-                              })
-                            }
-                          })
-                          break;
-                        }
-                      }
-                    })
-                  }
-              
+                wx.setStorage({
+                  key: 'savor_user_info',
+                  data: res.data.result.userinfo,
+                })
+              },
+              fail: function (e) {
+                wx.setStorage({
+                  key: 'savor_user_info',
+                  data: { 'openid': openid },
                 })
               }
-            })
-            
-            
-          }else {
+            });//判断用户是否注册结束
 
           }
-          
         }
-      })
+
+      }
+      getHotelInfo(box_mac);
+      function getHotelInfo(box_mac) {//获取链接的酒楼信息
+        wx.request({
+          url: 'https://mobile.littlehotspot.com/Smallappsimple/Index/getHotelInfo',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          data: {
+            box_mac: box_mac,
+          },
+          method: "POST",
+          success: function (res) {
+            that.setData({
+              is_link: 1
+            })
+            if (res.data.code == 10000) {
+              var wifi_name = res.data.result.wifi_name;
+              var wifi_password = res.data.result.wifi_password;
+              var use_wifi_password = wifi_password
+              if (wifi_password == '') {
+                wifi_password = "未设置wifi密码";
+              }
+              that.setData({
+                hotel_name: res.data.result.hotel_name,
+                room_name: res.data.result.room_name,
+                is_link: 1,
+                wifi_name: wifi_name,
+                wifi_password: wifi_password
+              })
+
+
+              wx.startWifi({
+                success: function (res) {
+
+                  wx.getWifiList({
+                    success: function (et) {
+                      wx.onGetWifiList(function (ret) {
+                        var wifilist = ret.wifiList;
+                        console.log(wifilist);
+                        for (var i = 0; i < ret.wifiList.length; i++) {
+                          if (wifi_name == wifilist[i]['SSID']) {
+                            console.log(wifilist[i]);
+                            wx.connectWifi({
+                              SSID: wifilist[i]['SSID'],
+                              BSSID: wifilist[i]['BSSID'],
+                              password: use_wifi_password,
+                              success: function (res) {
+                                console.log('wifi连接成功');
+                                that.setData({
+                                  is_link_wifi: 1,
+
+                                })
+                              },
+                              fail: function (res) {
+                                //console.log(res.errMsg);
+                                that.setData({
+                                  is_link_wifi: 0,
+
+                                })
+                              }
+                            })
+                            break;
+                          }
+                        }
+                      })
+                    }
+
+                  })
+                }
+              })
+
+
+            } else {
+
+            }
+
+          }
+        })
+      }
     }
+    
     
   },
   viewWifi:function(res){
@@ -236,12 +245,36 @@ Page({
       }
     })
   },
-  //照片上电视
-  chooseImage:function(res){
+  
+  chooseImage: util.throttle(function (res) {//点击事件
+    var that = this;
+    that.setData({
+      hiddens: false,
+    })
     var box_mac = res.currentTarget.dataset.boxmac;
     var openid = res.currentTarget.dataset.openid;
     wx.navigateTo({
       url: '/pages/launch/pic/index?box_mac=' + box_mac + '&openid=' + openid,
     })
-  }
+    that.setData({
+      hiddens: true,
+    })
+  }, 1000),
+
+  //选择视频投屏
+  chooseVideo: util.throttle(function (res) {//点击事件
+    var that = this;
+    that.setData({
+      hiddens: false,
+    })
+    var box_mac = res.currentTarget.dataset.boxmac;
+    var openid = res.currentTarget.dataset.openid;
+    wx.navigateTo({
+      url: '/pages/launch/video/index?box_mac=' + box_mac + '&openid=' + openid,
+    })
+    that.setData({
+      hiddens: true,
+    })
+  }, 1000)
+
 })

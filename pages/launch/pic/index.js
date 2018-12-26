@@ -1,4 +1,5 @@
 // pages/launch/pic/index.js
+
 const app = getApp()
 var box_mac;
 var openid;
@@ -11,7 +12,9 @@ Page({
   data: {
     is_upload:0,
     img_lenth:0,
-    intranet_ip:''
+    intranet_ip:'',
+    filename_arr:'',
+    forscreen_char:'',
   },
 
   /**
@@ -77,6 +80,7 @@ Page({
     var img_lenth = e.detail.value.img_lenth;
     var intranet_ip = e.detail.value.intranet_ip;
     var mobile_brand = app.globalData.mobile_brand;
+    var forscreen_char = e.detail.value.forscreen_char;
     var upimgs = [];
     if (e.detail.value.upimgs0 != '' && e.detail.value.upimgs0 != undefined) upimgs[0] = e.detail.value.upimgs0;
     if (e.detail.value.upimgs1 != '' && e.detail.value.upimgs1 != undefined) upimgs[1] = e.detail.value.upimgs1;
@@ -88,11 +92,13 @@ Page({
     if (e.detail.value.upimgs7 != '' && e.detail.value.upimgs7 != undefined) upimgs[7] = e.detail.value.upimgs7;
     if (e.detail.value.upimgs8 != '' && e.detail.value.upimgs8 != undefined) upimgs[8] = e.detail.value.upimgs8;
     var forscreen_id = (new Date()).valueOf();
-    
+    var filename_arr = [];
     for (var i = 0; i < img_lenth; i++) {
       var img_url = upimgs[i]
+      var filename = (new Date()).valueOf();
+      filename_arr[i] = filename;
       wx.uploadFile({
-        url: "http://" + intranet_ip + ":8080/picH5?isThumbnail=1&imageId=20170301&deviceId=" + openid + "&deviceName=" + mobile_brand + "&rotation=90&imageType=1&web=true&forscreen_id=" + forscreen_id,
+        url: "http://" + intranet_ip + ":8080/picH5?isThumbnail=1&imageId=20170301&deviceId=" + openid + "&deviceName=" + mobile_brand + "&rotation=90&imageType=1&web=true&forscreen_id=" + forscreen_id + '&forscreen_char=' + forscreen_char + '&filename='+filename,
         filePath: img_url,
         name: 'fileUpload',
         success: function (res) {
@@ -108,7 +114,9 @@ Page({
     }
     that.setData({
       up_imgs: upimgs,
-      is_upload:1
+      filename_arr: filename_arr,
+      is_upload:1,
+      forscreen_char:forscreen_char,
     })
     
   },
@@ -144,7 +152,64 @@ Page({
       }
     })
   },
+  up_single_pic:function(res){
+    var that = this;
+    //console.log(res);
+    openid = res.currentTarget.dataset.openid;
+    box_mac = res.currentTarget.dataset.boxmac;
+    intranet_ip = res.currentTarget.dataset.intranet_ip
+    var filename = res.currentTarget.dataset.filename;
+    var forscreen_char = res.currentTarget.dataset.forscreen_char;
+    var forscreen_id = (new Date()).valueOf();
+    var mobile_brand = app.globalData.mobile_brand;
+    var img_url = res.currentTarget.dataset.img_url;
+    wx.uploadFile({
+      url: "http://" + intranet_ip + ":8080/picH5?isThumbnail=1&imageId=20170301&deviceId=" + openid + "&deviceName=" + mobile_brand + "&rotation=90&imageType=1&web=true&forscreen_id=" + forscreen_id + '&forscreen_char=' + forscreen_char + '&filename=' + filename,
+      filePath: img_url,
+      name: 'fileUpload',
+      success: function (res) {
+        console.log(res)
+      },
+      complete: function (es) {
+        console.log(es)
+      },
+      fial: function ({ errMsg }) {
+        console.log('uploadImage fial,errMsg is', errMsg)
+      },
+    });
+  },
 
+  exitForscreen:function(res){
+    var that = this;
+    openid = res.currentTarget.dataset.openid;
+    box_mac = res.currentTarget.dataset.boxmac;
+    intranet_ip = res.currentTarget.dataset.intranet_ip;
+    
+    wx.request({
+      url: "http://" + intranet_ip + ":8080/h5/stop?deviceId=" + openid+"&web=true",
+      success: function (res) {
+        console.log(res);
+        wx.navigateBack({
+          delta: 1
+        })
+        wx.showToast({
+          title: '退出成功',
+          icon: 'none',
+          duration: 2000
+        });
+      },
+      fial: function ({ errMsg }) {
+        
+        wx.showToast({
+          title: '退出失败',
+          icon: 'none',
+          duration: 2000
+        });
+      },
+    })
+    
+   
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成

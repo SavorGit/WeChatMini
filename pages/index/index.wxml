@@ -12,7 +12,7 @@
       <image src='/images/icon/f6f3ee_pic.png'></image>
       <label>照片上电视</label>
     </view>
-    <view class='btn'>
+    <view class='btn' bindtap='chooseVideo' data-boxmac="{{box_mac}}" data-openid="{{openid}}">
       <image src='/images/icon/f6f3ee_video.png'></image>
       <label>视频上电视{{box_mac}}</label>
     </view>
@@ -32,4 +32,7 @@
       <button bindtap='copyPasswod' data-wifi_password="{{wifi_password}}">复制</button>
     </view>
   </view>
+  <view class="body-view">
+      <loading hidden="{{hiddens}}" bindchange="loadingChange">加载中...</loading>
+    </view>
 </view>
