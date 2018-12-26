@@ -13,5 +13,8 @@
     "navigationBarBackgroundColor": "#06111A",
     "navigationBarTitleText": "小热点-极简版",
     "navigationBarTextStyle": "white"
-  }
+  },
+  "navigateToMiniProgramAppIdList":[
+    "wxfdf0346934bb672f"
+  ]
 }

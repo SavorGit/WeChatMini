@@ -22,7 +22,7 @@ Page({
  
   onLoad: function (e) {
     var that = this;
-    //box_mac = e.box_mac        *********上线打开
+    //box_mac = e.box_mac        //*********上线打开
     box_mac = '00226D655202'     //******上线去掉*/
     that.setData({
       box_mac:box_mac,
@@ -234,6 +234,14 @@ Page({
           }
         })
       }
+    })
+  },
+  //照片上电视
+  chooseImage:function(res){
+    var box_mac = res.currentTarget.dataset.boxmac;
+    var openid = res.currentTarget.dataset.openid;
+    wx.navigateTo({
+      url: '/pages/launch/pic/index?box_mac=' + box_mac + '&openid=' + openid,
     })
   }
 })

@@ -8,7 +8,7 @@
     <view wx:if="{{is_link ==1}}"  class='tip'>
       <label>您已成功链接“{{hotel_name}}”的{{room_name}}电视</label>
     </view>
-    <view class='btn'>
+    <view class='btn' bindtap="chooseImage" data-boxmac="{{box_mac}}" data-openid="{{openid}}">
       <image src='/images/icon/f6f3ee_pic.png'></image>
       <label>照片上电视</label>
     </view>
@@ -18,7 +18,7 @@
     </view>
   </view>
   <view class='full_width page-bottom'>
-    <navigator>
+    <navigator target="miniProgram" app-id="wxfdf0346934bb672f" path="pages/index/index?box_mac=111">
       <label>前往「热点投屏」普通版</label>
       <image></image>
     </navigator>
