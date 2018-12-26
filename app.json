@@ -1,12 +1,17 @@
 {
-  "pages":[
+  "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/launch/video/index",
+    "pages/launch/video/upload_fail",
+    "pages/launch/video/upload_success",
+    "pages/launch/pic/index",
+    "pages/launch/pic/upload_success"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#06111A",
     "navigationBarTitleText": "小热点-极简版",
-    "navigationBarTextStyle":"white"
+    "navigationBarTextStyle": "white"
   }
 }
