@@ -1,11 +1,11 @@
 <!--index.wxml-->
 <view class="container">
-  <view   class='full_width flex_row_center page-top'>
+  <view class='full_width flex_row_center page-top'>
     <label>传输速度慢？链接包间wif试试！</label>
     <button bindtap='viewWifi' data-box_mac='{{box_mac}}'>链接wifi</button>
   </view>
   <view class='page-main'>
-    <view wx:if="{{is_link ==1}}"  class='tip'>
+    <view wx:if="{{is_link ==1}}" class='tip'>
       <label>您已成功链接“{{hotel_name}}”的{{room_name}}电视</label>
     </view>
     <view class='btn' bindtap="chooseImage" data-boxmac="{{box_mac}}" data-openid="{{openid}}">
@@ -20,7 +20,7 @@
   <view class='full_width page-bottom'>
     <navigator target="miniProgram" app-id="wxfdf0346934bb672f" path="pages/index/index?box_mac=111">
       <label>前往「热点投屏」普通版</label>
-      <image></image>
+      <image src='/images/icon/white-right-arrow.png'></image>
     </navigator>
   </view>
   <view wx:if="{{is_link_wifi ==0}}" class='wifi-tip' style='display:flex;'>

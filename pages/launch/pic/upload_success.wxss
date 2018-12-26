@@ -19,6 +19,7 @@
 }
 
 .grids-frame {
+  width: calc(100% - 70rpx);
   height: 458rpx;
   margin: 35rpx calc(100vw - 718rpx) 35rpx calc(100vw - 717rpx);
 }
@@ -77,7 +78,7 @@ image.pic_show_cur {
   margin: 24rpx 0 180rpx 28rpx;
   width: 690rpx;
   height: 148rpx;
-  color: #000;
+  color: #fff;
   font-size: 28rpx;
   border: 1rpx #a5a19d solid;
   border-radius: 10rpx;
