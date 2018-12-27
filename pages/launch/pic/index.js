@@ -16,6 +16,7 @@ Page({
     filename_arr:'',
     forscreen_char:'',
     up_imgs:[],
+    is_btn_disabel: false,
   },
 
   /**
@@ -71,6 +72,9 @@ Page({
   },
   up_forscreen:function(e){
     var that= this;
+    that.setData({
+      is_btn_disabel: true,
+    })
     //console.log(res.detail.value);
     var img_lenth = e.detail.value.img_lenth;
     var intranet_ip = e.detail.value.intranet_ip;
@@ -152,7 +156,8 @@ Page({
     that.setData({
       box_mac: box_mac,
       openid: openid,
-      intranet_ip: intranet_ip
+      intranet_ip: intranet_ip,
+      is_btn_disabel: true,
     })
 
     wx.chooseImage({
@@ -170,7 +175,8 @@ Page({
           up_imgs: tmp_imgs,
           img_lenth: img_len,
           intranet_ip: intranet_ip,
-          is_upload:0
+          is_upload:0,
+          is_btn_disabel: false,
         })
       }
     })

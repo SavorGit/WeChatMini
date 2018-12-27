@@ -14,6 +14,7 @@ Page({
     openid:'',
     box_mac:'',
     video_url:'',
+    is_forscreen:0,
   },
 
   /**
@@ -58,6 +59,7 @@ Page({
                 box_mac: box_mac,
                 duration: res.duration,
                 video_size: res.size,
+                is_forscreen:1
               })
               
 
@@ -70,6 +72,9 @@ Page({
   },
   forscreen_video:function(res){
     var that = this;
+    that.setData({
+      is_forscreen: 0,
+    })
     openid = res.currentTarget.dataset.openid;
     box_mac = res.currentTarget.dataset.boxmac;
     intranet_ip = res.currentTarget.dataset.intranet_ip;
@@ -156,6 +161,7 @@ Page({
           box_mac: box_mac,
           duration: res.duration,
           video_size: res.size,
+          is_forscreen:1
         })
         /*wx.uploadFile({
           url: 'http://' + intranet_ip + ':8080/videoH5?deviceId=' + openid + '&deviceName=MI5&web=true&forscreen_id=' + forscreen_id + '&filename=' + filename,

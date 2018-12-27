@@ -34,7 +34,7 @@
     </view>
   </view>
   <view class='full_width page-bottom'>
-    <button form-type="submit" class='button_1'>投屏</button>
+    <button form-type="submit" class='button_1' disabled='{{is_btn_disabel}}'>投屏</button>
   </view>
   </form>
 </view>
@@ -48,7 +48,7 @@
 
       <view class="weui-grid" wx:for="{{up_imgs}}" wx:key="key" wx:for-item="bean" wx:for-index="index">
         <view class="pic_show" bindtap='up_single_pic' data-boxmac="{{box_mac}}" data-openid="{{openid}}"
-        data-img_url="{{bean.img_url}}" data-intranet_ip='{{intranet_ip}}' data-filename='{{filename_arr[index]}}' data-forscreen_char='{{forscreen_char}}'>
+        data-img_url="{{bean.img_url}}" data-intranet_ip='{{intranet_ip}}' data-filename='{{filename_arr[index]}}' data-forscreen_char='{{forscreen_char}}' data-resouce_size="{{bean.img_size}}">
           <image class='pic_show' mode='aspectFill' src="{{bean.img_url}}"></image>
         </view>
       </view>
