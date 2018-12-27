@@ -24,12 +24,12 @@ Page({
  
   onLoad: function (e) {
     var that = this;
-    box_mac = e.box_mac        //*********上线打开
+    //box_mac = e.box_mac        //*********上线打开
     box_mac = '00226D655202'     //******上线去掉*/
     
     if (box_mac == undefined){
       
-     
+     console.log('该小程序不支持投屏');
     }else {
       that.setData({
         box_mac: box_mac,
@@ -120,61 +120,102 @@ Page({
               var wifi_name = res.data.result.wifi_name;
               var wifi_password = res.data.result.wifi_password;
               var use_wifi_password = wifi_password
+              
+              
               if (wifi_password == '') {
                 wifi_password = "未设置wifi密码";
               }
-              that.setData({
-                hotel_name: res.data.result.hotel_name,
-                room_name: res.data.result.room_name,
-                is_link: 1,
-                wifi_name: wifi_name,
-                wifi_password: wifi_password
-              })
+              var wifi_mac = res.data.result.wifi_mac;
+              if(wifi_mac==''){//如果后台未填写wifi_mac  获取wifi列表自动链接
+                that.setData({
+                  hotel_name: res.data.result.hotel_name,
+                  room_name: res.data.result.room_name,
+                  is_link: 1,
+                  wifi_name: wifi_name,
+                  wifi_password: wifi_password
+                })
 
 
-              wx.startWifi({
-                success: function (res) {
+                wx.startWifi({
+                  success: function (res) {
 
-                  wx.getWifiList({
-                    success: function (et) {
-                      wx.onGetWifiList(function (ret) {
-                        var wifilist = ret.wifiList;
-                        console.log(wifilist);
-                        for (var i = 0; i < ret.wifiList.length; i++) {
-                          if (wifi_name == wifilist[i]['SSID']) {
-                            console.log(wifilist[i]);
-                            wx.connectWifi({
-                              SSID: wifilist[i]['SSID'],
-                              BSSID: wifilist[i]['BSSID'],
-                              password: use_wifi_password,
-                              success: function (res) {
-                                console.log('wifi连接成功');
-                                that.setData({
-                                  is_link_wifi: 1,
+                    wx.getWifiList({
+                      success: function (et) {
+                        wx.onGetWifiList(function (ret) {
+                          var wifilist = ret.wifiList;
+                          console.log(wifilist);
+                          for (var i = 0; i < ret.wifiList.length; i++) {
+                            if (wifi_name == wifilist[i]['SSID']) {
+                              console.log(wifilist[i]);
+                              wx.connectWifi({
+                                SSID: wifilist[i]['SSID'],
+                                BSSID: wifilist[i]['BSSID'],
+                                password: use_wifi_password,
+                                success: function (res) {
+                                  console.log('wifi连接成功');
+                                  that.setData({
+                                    is_link_wifi: 1,
 
-                                })
-                              },
-                              fail: function (res) {
-                                //console.log(res.errMsg);
-                                that.setData({
-                                  is_link_wifi: 0,
+                                  })
+                                },
+                                fail: function (res) {
+                                  //console.log(res.errMsg);
+                                  that.setData({
+                                    is_link_wifi: 0,
 
-                                })
-                              }
-                            })
-                            break;
+                                  })
+                                }
+                              })
+                              break;
+                            }
                           }
-                        }
-                      })
-                    }
+                        })
+                      }
 
-                  })
-                }
-              })
-
-
-            } else {
-
+                    })
+                  }
+                })
+              }else {//如果后台填写了wifi_mac直接链接
+                that.setData({
+                  hotel_name: res.data.result.hotel_name,
+                  room_name: res.data.result.room_name,
+                  is_link: 1,
+                  wifi_name: wifi_name,
+                  wifi_password: wifi_password
+                })
+                wx.startWifi({
+                  success: function () {
+                    wx.connectWifi({
+                      SSID: wifi_name,
+                      BSSID: wifi_mac,
+                      password: use_wifi_password,
+                      success: function (res) {
+                        wx.showToast({
+                          title: 'wifi链接成功',
+                          icon: 'none',
+                          duration: 2000
+                        });
+                        that.setData({
+                          is_link_wifi: 1,
+                        })
+                      },
+                      fail: function (res) {
+                        wx.showToast({
+                          title: '请连接包间wifi',
+                          icon: 'none',
+                          duration: 2000
+                        });
+                      }
+                    })
+                  }
+                })
+              }
+            } else {//未获取到酒楼信息
+              wx.showToast({
+                title: '该电视暂不支持小程序投屏',
+                icon: 'none',
+                duration: 2000
+              });
             }
 
           }

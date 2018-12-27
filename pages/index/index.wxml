@@ -1,6 +1,6 @@
 <!--index.wxml-->
 <view class="container">
-  <view class='full_width flex_row_center page-top'>
+  <view wx:if="{{is_link_wifi ==0}}" class='full_width flex_row_center page-top'>
     <label>传输速度慢？链接包间wif试试！</label>
     <button bindtap='viewWifi' data-box_mac='{{box_mac}}'>链接wifi</button>
   </view>

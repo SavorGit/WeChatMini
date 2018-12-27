@@ -6,18 +6,19 @@
     <label>视频上传成功后，电视下载完毕开始播放</label>
   </view>
   <view class='full_width page-main'>
-    <video class='full_width'></video>
+    <video class='full_width' src='{{video_url}}'></video>
 
-    <!-- 上传操作前不显示，有上传动作后才显示 -->
-    <view class='full_width upload-progress'>
+    
+    <!-- <view class='full_width upload-progress'>
       <progress active-color="rgba(28, 190, 182, 0.66)" background-color="#FFFFFF" percent="30"></progress>
       <label class="font_932C3F_34">0%</label>
-    </view>
+    </view>  -->
 
   </view>
   <view class='full_width page-bottom'>
-    <button class='button_1'>投屏</button>
-  </view>
+    <button class='button_1' bindtap="forscreen_video" data-video_url="{{video_url}}" data-intranet_ip='{{intranet_ip}}'  data-box_mac="{{box_mac}}" data-openid="{{openid}}" data-duration="{{duration}}" data-video_size="{{video_size}}">投屏</button>
+  </view> 
+  
 </view>
 
 
@@ -30,7 +31,7 @@
     <video class='full_width' src="{{vedio_url}}"></video>
   </view>
   <view class='full_width page-bottom'>
-    <button class='button_2'>重选视频</button>
-    <button class='button_2' style='background-color:rgb(153, 153, 153);'>退出投屏</button>
+    <button class='button_2' bindtap='chooseVedio' data-intranet_ip='{{intranet_ip}}'  data-box_mac="{{box_mac}}" data-openid="{{openid}}">重选视频</button>
+    <button bindtap='exitForscreen' data-intranet_ip='{{intranet_ip}}'  data-boxmac="{{box_mac}}" data-openid="{{openid}}" class='button_2' style='background-color:rgb(153, 153, 153);'>退出投屏</button>
   </view>
 </view>

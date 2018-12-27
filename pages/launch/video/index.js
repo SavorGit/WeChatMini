@@ -1,13 +1,19 @@
 // pages/launch/video/index.js
+const app = getApp()
 var openid;
 var box_mac;
+var intranet_ip;
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    is_upload:0
+    is_upload:0,
+    intranet_ip,
+    openid:'',
+    box_mac:'',
+    video_url:'',
   },
 
   /**
@@ -17,6 +23,7 @@ Page({
     var that = this;
     box_mac = res.box_mac;
     openid = res.openid;
+    
     that.setData({
       box_mac: box_mac,
       openid: openid
@@ -30,41 +37,68 @@ Page({
         box_mac: box_mac
       },
       success: function (res) {
-        console.log(res);
         
         if (res.data.code = 10000 && res.data.result.intranet_ip != '') {
           var intranet_ip = res.data.result.intranet_ip;
           var forscreen_id = (new Date()).valueOf();
           var filename = (new Date()).valueOf();
+
+
           wx.chooseVideo({
             sourceType: ['album', 'camera'],
             maxDuration: 60,
             camera: 'back',
             success: function (res) {
+              console.log(res);
               var video_url = res.tempFilePath
-              wx.uploadFile({
-                url: 'http://' + intranet_ip + ':8080/videoH5?deviceId=' + openid + '&deviceName=MI5&web=true&forscreen_id=' + forscreen_id +'&filename='+filename,
-                filePath: video_url,
-                name: 'fileUpload',
-                success: function (res) {
-                  that.setData({
-                    is_upload: 1,
-                    vedio_url: video_url,
-                  })
-                },
-                complete: function (es) {
-                  console.log(es)
-                },
-                fial: function ({ errMsg }) {
-                  console.log('uploadImage fial,errMsg is', errMsg)
-                },
+              that.setData({
+                video_url: video_url,
+                intranet_ip: intranet_ip,
+                openid: openid,
+                box_mac: box_mac,
+                duration: res.duration,
+                video_size: res.size,
               })
+              
 
               
             }
           })
         }
       }
+    })
+  },
+  forscreen_video:function(res){
+    var that = this;
+    openid = res.currentTarget.dataset.openid;
+    box_mac = res.currentTarget.dataset.boxmac;
+    intranet_ip = res.currentTarget.dataset.intranet_ip;
+    var video_url = res.currentTarget.dataset.video_url;
+    var mobile_brand = app.globalData.mobile_brand;
+    var mobile_model = app.globalData.mobile_model;
+    var resouce_size = res.currentTarget.dataset.video_size;
+    var duration = res.currentTarget.dataset.duration;
+    var forscreen_id = (new Date()).valueOf();
+    var filename = (new Date()).valueOf();
+    
+    console.log(res);
+    wx.uploadFile({
+      url: 'http://' + intranet_ip + ':8080/videoH5?deviceId=' + openid + '&deviceName=' + mobile_brand + '&web=true&forscreen_id=' + forscreen_id + '&filename=' + filename + '&device_model=' + mobile_model + '&resource_size=' + resouce_size + '&duration=' + duration,
+      filePath: video_url,
+      name: 'fileUpload',
+      success: function (res) {
+        that.setData({
+          is_upload: 1,
+          vedio_url: video_url,
+          intranet_ip: intranet_ip
+        })
+      },
+      complete: function (es) {
+        console.log(es)
+      },
+      fial: function ({ errMsg }) {
+        console.log('uploadImage fial,errMsg is', errMsg)
+      },
     })
   },
   exitForscreen:function(res){
@@ -98,13 +132,14 @@ Page({
   },
   chooseVedio:function(res){
     var that = this;
-    box_mac = res.box_mac;
-    openid = res.openid;
+    console.log(res);
+    box_mac = res.currentTarget.dataset.box_mac;
+    openid = res.currentTarget.dataset.openid;
     that.setData({
       box_mac: box_mac,
       openid: openid
     })
-    var intranet_ip = res.data.result.intranet_ip;
+    var intranet_ip = res.currentTarget.dataset.intranet_ip;
     var forscreen_id = (new Date()).valueOf();
     var filename = (new Date()).valueOf();
     wx.chooseVideo({
@@ -113,7 +148,16 @@ Page({
       camera: 'back',
       success: function (res) {
         var video_url = res.tempFilePath
-        wx.uploadFile({
+        that.setData({
+          is_upload:0,
+          video_url: video_url,
+          intranet_ip: intranet_ip,
+          openid: openid,
+          box_mac: box_mac,
+          duration: res.duration,
+          video_size: res.size,
+        })
+        /*wx.uploadFile({
           url: 'http://' + intranet_ip + ':8080/videoH5?deviceId=' + openid + '&deviceName=MI5&web=true&forscreen_id=' + forscreen_id + '&filename=' + filename,
           filePath: video_url,
           name: 'fileUpload',
@@ -129,7 +173,7 @@ Page({
           fial: function ({ errMsg }) {
             console.log('uploadImage fial,errMsg is', errMsg)
           },
-        })
+        })*/
       }
     })
   },
