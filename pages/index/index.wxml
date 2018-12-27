@@ -38,11 +38,11 @@
 </view>
 
 <!-- 弹窗 -->
-<modal show='{{showModal}}' width="90vw" height="420rpx" title-text="温馨提示" confirmText="" cancelText="">
+<!-- <modal show='{{showModal}}' width="90vw" height="420rpx" title-text="温馨提示" confirmText="" cancelText="">
   <view style='display: flex;flex-direction: column;align-items: center; font-size: 30rpx;'>
     <label style='height: 50rpx;'>使用前需前往[热点投屏]小程序进行链接电视，</label>
     <label style='height: 50rpx;'>否则无法使用本小程序的功能。</label>
     <label style='height: 50rpx;'>为您带来的不便，敬请谅解。</label>
     <button style='width: 260rpx; height: 60rpx; line-height: 60rpx; color: #FFF; font-size: 28rpx; margin: 30rpx 0 0 0; padding: 0; border: 0; background-color: rgb(28, 190, 182); border-radius: 30rpx;'>前往[热点投屏]</button>
   </view>
-</modal>
+</modal> -->

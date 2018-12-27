@@ -20,6 +20,7 @@ Page({
     wifi_name:'',
     wifi_password:'',
     hiddens:true,
+    
   },
  
   onLoad: function (e) {
@@ -27,9 +28,10 @@ Page({
     box_mac = e.box_mac        //*********上线打开
     //box_mac = '00226D655202'     //******上线去掉*/
     
+
     if (box_mac == undefined){
       
-     console.log('该小程序不支持投屏');
+      
     }else {
       that.setData({
         box_mac: box_mac,
