@@ -8,17 +8,22 @@
 .page-top {
   height: 40px;
   color: rgb(255, 255, 255);
-  background-color: rgb(15, 37, 57);
-  font-size: 14px;
 }
 
-.page-top label {
+.page-top .top-tip {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: rgb(15, 37, 57);
+}
+
+.page-top .top-tip label {
   font-weight: 400;
-  font-size: 16px;
+  font-size: 36rpx;
   margin-left: 20rpx;
 }
 
-.page-top button {
+.page-top .top-tip button {
   width: 76px;
   height: 31px;
   padding: 0rpx;
