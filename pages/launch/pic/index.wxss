@@ -11,8 +11,12 @@
   margin-left: 50rpx;
 }
 
+.upoad-form {
+  height: calc(100% - 88rpx);
+}
+
 .page-main {
-  height: calc(100% - 208rpx);
+  height: calc(100% - 120rpx);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
