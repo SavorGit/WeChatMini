@@ -24,8 +24,8 @@ Page({
  
   onLoad: function (e) {
     var that = this;
-    //box_mac = e.box_mac        //*********上线打开
-    box_mac = '00226D655202'     //******上线去掉*/
+    box_mac = e.box_mac        //*********上线打开
+    //box_mac = '00226D655202'     //******上线去掉*/
     
     if (box_mac == undefined){
       
