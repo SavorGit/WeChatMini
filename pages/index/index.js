@@ -31,7 +31,9 @@ Page({
 
     if (box_mac == undefined){
       
-      
+      that.setData({
+        showModal:true
+      })
     }else {
       that.setData({
         box_mac: box_mac,
