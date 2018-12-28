@@ -147,16 +147,16 @@ Page({
                       success: function (et) {
                         wx.onGetWifiList(function (ret) {
                           var wifilist = ret.wifiList;
-                          console.log(wifilist);
+                          //console.log(wifilist);
                           for (var i = 0; i < ret.wifiList.length; i++) {
                             if (wifi_name == wifilist[i]['SSID']) {
-                              console.log(wifilist[i]);
+                              //console.log(wifilist[i]);
                               wx.connectWifi({
                                 SSID: wifilist[i]['SSID'],
                                 BSSID: wifilist[i]['BSSID'],
                                 password: use_wifi_password,
                                 success: function (res) {
-                                  console.log('wifi连接成功');
+                                  //console.log('wifi连接成功');
                                   that.setData({
                                     is_link_wifi: 1,
 

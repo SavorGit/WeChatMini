@@ -50,7 +50,7 @@ Page({
             maxDuration: 60,
             camera: 'back',
             success: function (res) {
-              console.log(res);
+              //console.log(res);
               var video_url = res.tempFilePath
               that.setData({
                 video_url: video_url,
@@ -91,7 +91,7 @@ Page({
     var forscreen_id = (new Date()).valueOf();
     var filename = (new Date()).valueOf();
     
-    console.log(res);
+    //console.log(res);
     wx.uploadFile({
       url: 'http://' + intranet_ip + ':8080/videoH5?deviceId=' + openid + '&deviceName=' + mobile_brand + '&web=true&forscreen_id=' + forscreen_id + '&filename=' + filename + '&device_model=' + mobile_model + '&resource_size=' + resouce_size + '&duration=' + duration + '&action=2&resource_type=2',
       filePath: video_url,
@@ -120,7 +120,7 @@ Page({
     wx.request({
       url: "http://" + intranet_ip + ":8080/h5/stop?deviceId=" + openid + "&web=true",
       success: function (res) {
-        console.log(res);
+        //console.log(res);
         wx.navigateBack({
           delta: 1
         })
@@ -142,7 +142,7 @@ Page({
   },
   chooseVedio:function(res){
     var that = this;
-    console.log(res);
+    //console.log(res);
     box_mac = res.currentTarget.dataset.box_mac;
     openid = res.currentTarget.dataset.openid;
     that.setData({
