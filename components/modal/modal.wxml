@@ -1,4 +1,4 @@
-<!--components/modal/modal.wxml-->{{show}}
+<!--components/modal/modal.wxml-->
 <view wx:if="{{show}}" class='mask' bindtap='clickMask'>
   <view class='modal-content' style="{{width != '' ? 'width: ' + width + ';' : ''}}{{height != '' ? 'height: ' + height + ';' : ''}}{{borderRadius != '' ? 'border-radius: ' + borderRadius + ';' : ''}}{{backgroundColor != '' ? 'background-color: ' + backgroundColor + ';' : ''}}">
     <view wx:if="{{titleText != ''}}" class='title' style='color: {{titleColor}};'>
