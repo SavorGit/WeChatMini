@@ -57,11 +57,20 @@ Page({
                 img_lenth: img_len,
                 intranet_ip: intranet_ip,
               })
+            },
+            fail:function(e){
+              wx.navigateBack({
+                delta: 1,
+              })
             }
           })
           
         }else {//没有拿到机顶盒内网ip
-
+          wx.showToast({
+            title: '该电视暂不支持投屏',
+            icon: 'none',
+            duration: 2000
+          });
         }
       }
 

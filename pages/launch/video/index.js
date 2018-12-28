@@ -64,6 +64,11 @@ Page({
               
 
               
+            },
+            fail:function(e){
+              wx.navigateBack({
+                delta: 1,
+              })
             }
           })
         }
