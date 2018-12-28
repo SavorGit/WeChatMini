@@ -4,7 +4,7 @@ const util = require('../../utils/util.js')
 const app = getApp()
 var openid;
 var box_mac;
-var is_view_link = 0;
+var is_view_wifi = 0;
 Page({
   data: {
     
@@ -231,11 +231,13 @@ Page({
   },
   viewWifi:function(res){
     var that = this;
-    if(is_view_link==0){
+    
+    if (is_view_wifi==0){
       that.setData({
-        is_link_wifi:1,
+        //is_view_link:1,
+        is_view_wifi:1
       })
-      is_view_link = 1;
+      is_view_wifi = 1;
     }else {
       box_mac = res.target.dataset.box_mac;
      
@@ -260,9 +262,9 @@ Page({
             that.setData({
               wifi_name: wifi_name,
               wifi_password: wifi_password,
-              is_link_wifi: 0,
+              is_view_wifi: 0,
             })
-            is_view_link = 0;
+            is_view_wifi = 0;
           } else {
             wx.showToast({
               title: '该电视暂不支持小程序投屏',

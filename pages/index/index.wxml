@@ -25,7 +25,7 @@
       <image src='/images/icon/white-right-arrow.png'></image>
     </navigator>
   </view>
-  <view wx:if="{{is_link_wifi ==0}}" class='wifi-tip' style='display:flex;'>
+  <view wx:if="{{is_view_wifi ==1}}" class='wifi-tip' style='display:flex;'>
     <view class='wifi-ssid'>
       <label>wifi名称：{{wifi_name}}</label>
     </view>
