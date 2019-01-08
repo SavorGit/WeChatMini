@@ -87,7 +87,7 @@ Page({
             openid = openid;
             //判断用户是否注册
             wx.request({
-              url: 'https://mobile.littlehotspot.com/smallappsimple/User/isRegister',
+              url: 'https://mobile.littlehotspot.com/smallappsimple/User/isJjRegister',
               data: {
                 "openid": openid,
 
@@ -331,17 +331,25 @@ Page({
   //选择视频投屏
   chooseVideo: util.throttle(function (res) {//点击事件
     var that = this;
-    that.setData({
-      hiddens: false,
-    })
-    var box_mac = res.currentTarget.dataset.boxmac;
-    var openid = res.currentTarget.dataset.openid;
-    wx.navigateTo({
-      url: '/pages/launch/video/index?box_mac=' + box_mac + '&openid=' + openid,
-    })
-    that.setData({
-      hiddens: true,
-    })
+    var user_info = wx.getStorageSync("savor_user_info");
+    if (user_info.is_wx_auth != 2) {
+      that.setData({
+        showWXAuthLogin: true
+      })
+    }else {
+      that.setData({
+        hiddens: false,
+      })
+      var box_mac = res.currentTarget.dataset.boxmac;
+      var openid = res.currentTarget.dataset.openid;
+      wx.navigateTo({
+        url: '/pages/launch/video/index?box_mac=' + box_mac + '&openid=' + openid,
+      })
+      that.setData({
+        hiddens: true,
+      })
+    }
+    
   }, 1000),
   scanCode:function(e){
     wx.showModal({
