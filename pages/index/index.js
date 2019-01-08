@@ -25,12 +25,18 @@ Page({
  
   onLoad: function (e) {
     var that = this;
-    box_mac = e.box_mac        //*********上线打开
-    //box_mac = '00226D655202'     //******上线去掉*/
+    var scene = decodeURIComponent(e.scene);
     
-
-    if (box_mac == undefined){
+    if (scene != 'undefined' ){//扫小程序码过来 
+      //console.log(scene);
+      box_mac = scene;  
+      //box_mac = '00226D655202'     //******上线去掉*/
+    }else {//小程序跳转过来
       
+      box_mac = e.box_mac            //*********上线打开
+      //box_mac = '00226D655202'     //******上线去掉*/
+    }
+    if (box_mac == undefined || box_mac =='undefined' || box_mac=='' ){
       that.setData({
         showModal:true
       })
@@ -322,6 +328,27 @@ Page({
     that.setData({
       hiddens: true,
     })
-  }, 1000)
+  }, 1000),
+  scanCode:function(e){
+    wx.showModal({
+      title: '提示',
+      content: "您可扫码链接热点合作餐厅电视,使用此功能",
+      showCancel: true,
+      confirmText: '立即扫码',
+      success: function (res) {
+        if (res.confirm == true) {
+          wx.scanCode({
+            onlyFromCamera: true,
+            success: (res) => {
+              //console.log(res);
+              wx.navigateTo({
+                url: '/' + res.path
+              })
+            }
+          })
+        }
+      }
+    });
+  },
 
 })

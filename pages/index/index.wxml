@@ -18,6 +18,10 @@
       <image src='/images/icon/f6f3ee_video.png'></image>
       <label>视频上电视</label>
     </view>
+    <!-- <view class='btn' bindtap='scanCode' >
+      <image src='/images/icon/f6f3ee_video.png'></image>
+      <label>test</label>
+    </view> -->
   </view>
   <view class='full_width page-bottom'>
     <navigator target="miniProgram" app-id="wxfdf0346934bb672f" path="pages/index/index">
