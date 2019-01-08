@@ -44,7 +44,7 @@ App({
       success: res => {
         var code = res.code; //返回code
         wx.request({
-          url: 'https://mobile.littlehotspot.com/smallappsimple/index/getOpenid',
+          url: 'https://mobile.littlehotspot.com/smallappsimple/index/getJjOpenid',
           data: {
             "code": code
           },

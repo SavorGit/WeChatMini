@@ -15,6 +15,7 @@ Page({
     box_mac:'',
     video_url:'',
     is_forscreen:0,
+    hiddens:true,
   },
 
   /**
@@ -79,6 +80,7 @@ Page({
     var that = this;
     that.setData({
       is_forscreen: 0,
+      hiddens:false,
     })
     openid = res.currentTarget.dataset.openid;
     box_mac = res.currentTarget.dataset.boxmac;
@@ -100,7 +102,8 @@ Page({
         that.setData({
           is_upload: 1,
           vedio_url: video_url,
-          intranet_ip: intranet_ip
+          intranet_ip: intranet_ip,
+          hiddens:true,
         })
       },
       complete: function (es) {

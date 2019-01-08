@@ -36,6 +36,9 @@
       <button form-type="submit" class='button_1' disabled='{{is_btn_disabel}}'>投屏</button>
     </view>
   </form>
+  <view class="body-view">
+      <loading hidden="{{hiddens}}" bindchange="loadingChange">亲^_^投屏中,请稍后...</loading>
+  </view>
 </view>
 <!-- 上传照片后 -->
 <view class="container" wx:if="{{is_upload>0}}">

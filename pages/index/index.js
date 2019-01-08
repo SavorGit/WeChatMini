@@ -47,13 +47,14 @@ Page({
       wx.hideShareMenu();
 
       if (app.globalData.openid && app.globalData.openid != '') {
+        
         that.setData({
           openid: app.globalData.openid
         })
         openid = app.globalData.openid;
         //判断用户是否注册
         wx.request({
-          url: 'https://mobile.littlehotspot.com/smallappsimple/User/isRegister',
+          url: 'https://mobile.littlehotspot.com/smallappsimple/User/isJjRegister',
           data: {
             "openid": app.globalData.openid,
 
@@ -79,6 +80,7 @@ Page({
       } else {
         app.openidCallback = openid => {
           if (openid != '') {
+            console.log(openid);
             that.setData({
               openid: openid
             })
@@ -301,17 +303,29 @@ Page({
   
   chooseImage: util.throttle(function (res) {//点击事件
     var that = this;
-    that.setData({
-      hiddens: false,
-    })
-    var box_mac = res.currentTarget.dataset.boxmac;
-    var openid = res.currentTarget.dataset.openid;
-    wx.navigateTo({
-      url: '/pages/launch/pic/index?box_mac=' + box_mac + '&openid=' + openid,
-    })
-    that.setData({
-      hiddens: true,
-    })
+
+    var user_info = wx.getStorageSync("savor_user_info");
+    
+    if (user_info.is_wx_auth != 2) {
+      that.setData({
+        showWXAuthLogin: true
+      })
+    }else {
+      that.setData({
+        hiddens: false,
+      })
+      var box_mac = res.currentTarget.dataset.boxmac;
+      var openid = res.currentTarget.dataset.openid;
+      wx.navigateTo({
+        url: '/pages/launch/pic/index?box_mac=' + box_mac + '&openid=' + openid,
+      })
+      that.setData({
+        hiddens: true,
+      })
+    }
+
+
+    
   }, 1000),
 
   //选择视频投屏
@@ -350,5 +364,56 @@ Page({
       }
     });
   },
+  onGetUserInfo: function (res) {
+    var that = this;
+    var user_info = wx.getStorageSync("savor_user_info");
+    openid = user_info.openid;
+    if (res.detail.errMsg == 'getUserInfo:ok') {
+      wx.request({
+        url: 'https://mobile.littlehotspot.com/Smallappsimple/User/register',
+        data: {
+          'openid': openid,
+          'avatarUrl': res.detail.userInfo.avatarUrl,
+          'nickName': res.detail.userInfo.nickName,
+          'gender': res.detail.userInfo.gender
+        },
+        header: {
+          'content-type': 'application/json'
+        },
+        success: function (res) {
+          wx.setStorage({
+            key: 'savor_user_info',
+            data: res.data.result,
+          });
+          that.setData({
+            showWXAuthLogin: false,
+          })
+        }
+      })
+    }
+  },
+  //关闭授权弹窗
+  closeAuth: function () {
+    //关闭授权登陆埋点
+    var that = this;
+    that.setData({
+      showWXAuthLogin: false,
+    })
+    var user_info = wx.getStorageSync("savor_user_info");
+    openid = user_info.openid;
+    if (box_mac == 'undefined' || box_mac == undefined) {
+      box_mac = '';
+    }
+    wx.request({
+      url: 'https://mobile.littlehotspot.com/Smallapp21/index/closeauthLog',
+      header: {
+        'content-type': 'application/json'
+      },
+      data: {
+        openid: openid,
+        box_mac: box_mac,
+      },
 
+    })
+  },
 })

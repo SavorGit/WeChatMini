@@ -19,7 +19,9 @@
     <button class='button_1' wx:if="{{is_forscreen==1}}" bindtap="forscreen_video" data-video_url="{{video_url}}" data-intranet_ip='{{intranet_ip}}' data-box_mac="{{box_mac}}" data-openid="{{openid}}" data-duration="{{duration}}" data-video_size="{{video_size}}">投屏</button>
     <button class='button_1' wx:if="{{is_forscreen==0}}"   style='background-color: rgba(28, 190, 182, 0.66);'>投屏</button>
   </view>
-
+  <view class="body-view">
+      <loading hidden="{{hiddens}}" bindchange="loadingChange">亲^_^投屏中,请稍后...</loading>
+  </view>
 </view>
 
 

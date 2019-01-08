@@ -17,6 +17,7 @@ Page({
     forscreen_char:'',
     up_imgs:[],
     is_btn_disabel: false,
+    hiddens: true,
   },
 
   /**
@@ -83,6 +84,7 @@ Page({
     var that= this;
     that.setData({
       is_btn_disabel: true,
+      hiddens:false,
     })
     //console.log(res.detail.value);
     var img_lenth = e.detail.value.img_lenth;
@@ -153,6 +155,7 @@ Page({
       filename_arr: filename_arr,
       is_upload:1,
       forscreen_char:forscreen_char,
+      hiddens: true,
     })
     
   },

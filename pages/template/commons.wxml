@@ -15,10 +15,10 @@
         </view>
       </view>
       <view class='wxAuthLogin-middle'>
-        <label class='content font_333333_30'>使用“热点投屏”过程中，请遵守相关法律法规。</label>
-        <label class='link_relief'>
+        <label class='content font_333333_30'>使用“小热点-极简版”过程中，请遵守相关法律法规。</label>
+        <!-- <label class='link_relief'>
           <navigator url="/pages/forscreen/relief">免责声明</navigator>
-        </label>
+        </label> -->
       </view>
       <view class='wxAuthLogin-bottom'>
         <button class='savor-btn' open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">微信授权登录</button>
