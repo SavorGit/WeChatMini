@@ -1,4 +1,5 @@
 <!--index.wxml-->
+<import src="/pages/template/commons" />
 <view class="container">
   <view class='full_width flex_row_center page-top'>
     <view wx:if="{{is_link_wifi ==0}}" class='full_width full_height top-tip'>
@@ -42,6 +43,9 @@
     <loading hidden="{{hiddens}}" bindchange="loadingChange">加载中...</loading>
   </view>
 </view>
+
+<!-- 微信授权 -->
+<template is="wxAuthLogin" data='{{show: showWXAuthLogin}}' />
 
 <!-- 弹窗 -->
 <modal show='{{showModal}}' width="90vw" height="420rpx" title-text="温馨提示" confirmText="" cancelText="">
