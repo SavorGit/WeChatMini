@@ -21,7 +21,7 @@
         </label> -->
       </view>
       <view class='wxAuthLogin-bottom'>
-        <button class='savor-btn' open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">微信授权登录</button>
+        <button class='savor-btn' open-type="getUserInfo" bindgetuserinfo="onGetUserInfo" data-wifi_name="{{wifi_name}}" data-wifi_password="{{wifi_password}}" data-wifi_mac="{{wifi_mac}}" >微信授权登录</button>
       </view>
     </view>
   </modal>

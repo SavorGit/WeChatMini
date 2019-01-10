@@ -18,43 +18,10 @@ Page({
     hotel_name:'',
     room_name:'',
     box_mac:'',
+    wifi_mac:'',
     wifi_name:'',
     wifi_password:'',
     hiddens:true,
-  },
-  getNetwork: function (box_mac) {
-    wx.removeStorage({
-      key: 'savor_netinfo'
-    })
-    wx.request({
-      url: 'https://mobile.littlehotspot.com/Smallappsimple/index/getInnerIp',
-      header: {
-        'content-type': 'application/json'
-      },
-      data: {
-        box_mac: box_mac
-      },
-      success: function (res) {
-        if (res.data.code = 10000 && res.data.result.intranet_ip != '') {
-          wx.setStorage({
-            key: 'savor_netinfo',
-            data: {'intranet_ip': res.data.result.intranet_ip,'is_network':1},
-          })
-        } else {//没有拿到机顶盒内网ip
-          wx.showToast({
-            title: '该电视暂不支持投屏',
-            icon: 'none',
-            duration: 2000
-          });
-        }
-      },
-      fail: function (e) {
-        wx.setStorage({
-          key: 'savor_netinfo',
-          data: { 'intranet_ip': '192.168.99.2', 'is_network': 0 },
-        })
-      }
-    })
   },
   onLoad: function (e) {
     var that = this;
@@ -65,7 +32,8 @@ Page({
       //box_mac = '00226D655202'     //******上线去掉*/
     }else {//小程序跳转过来
       box_mac = e.box_mac            //*********上线打开
-      box_mac = '00226D655202'     //******上线去掉*/
+      // box_mac = '00226D655202'     //******上线去掉*/
+      box_mac = '00226D5846EA'
     }
     if (box_mac == undefined || box_mac =='undefined' || box_mac=='' ){
       that.setData({
@@ -160,98 +128,110 @@ Page({
               is_link: 1
             })
             if (res.data.code == 10000) {
+              intranet_ip = res.data.result.intranet_ip;
               var wifi_name = res.data.result.wifi_name;
               var wifi_password = res.data.result.wifi_password;
               var use_wifi_password = wifi_password
-              
               
               if (wifi_password == '') {
                 wifi_password = "未设置wifi密码";
               }
               var wifi_mac = res.data.result.wifi_mac;
+
               if(wifi_mac==''){//如果后台未填写wifi_mac  获取wifi列表自动链接
                 that.setData({
                   hotel_name: res.data.result.hotel_name,
                   room_name: res.data.result.room_name,
                   is_link: 1,
                   wifi_name: wifi_name,
-                  wifi_password: wifi_password
+                  wifi_password: wifi_password,
+                  use_wifi_password: use_wifi_password
                 })
 
 
-                wx.startWifi({
-                  success: function (res) {
+                // wx.startWifi({
+                //   success: function (res) {
 
-                    wx.getWifiList({
-                      success: function (et) {
-                        wx.onGetWifiList(function (ret) {
-                          var wifilist = ret.wifiList;
-                          //console.log(wifilist);
-                          for (var i = 0; i < ret.wifiList.length; i++) {
-                            if (wifi_name == wifilist[i]['SSID']) {
-                              //console.log(wifilist[i]);
-                              wx.connectWifi({
-                                SSID: wifilist[i]['SSID'],
-                                BSSID: wifilist[i]['BSSID'],
-                                password: use_wifi_password,
-                                success: function (res) {
-                                  //console.log('wifi连接成功');
-                                  that.setData({
-                                    is_link_wifi: 1,
+                //     wx.getWifiList({
+                //       success: function (et) {
+                //         wx.onGetWifiList(function (ret) {
+                //           var wifilist = ret.wifiList;
+                //           //console.log(wifilist);
+                //           for (var i = 0; i < ret.wifiList.length; i++) {
+                //             if (wifi_name == wifilist[i]['SSID']) {
+                //               //console.log(wifilist[i]);
+                //               wx.connectWifi({
+                //                 SSID: wifilist[i]['SSID'],
+                //                 BSSID: wifilist[i]['BSSID'],
+                //                 password: use_wifi_password,
+                //                 success: function (res) {
+                //                   //console.log('wifi连接成功');
+                //                   that.setData({
+                //                     is_link_wifi: 1,
 
-                                  })
-                                },
-                                fail: function (res) {
-                                  //console.log(res.errMsg);
-                                  that.setData({
-                                    is_link_wifi: 0,
+                //                   })
+                //                 },
+                //                 fail: function (res) {
+                //                   //console.log(res.errMsg);
+                //                   that.setData({
+                //                     is_link_wifi: 0,
 
-                                  })
-                                }
-                              })
-                              break;
-                            }
-                          }
-                        })
-                      }
+                //                   })
+                //                 }
+                //               })
+                //               break;
+                //             }
+                //           }
+                //         })
+                //       }
 
-                    })
-                  }
-                })
+                //     })
+                //   }
+                // })
               }else {//如果后台填写了wifi_mac直接链接
                 that.setData({
                   hotel_name: res.data.result.hotel_name,
                   room_name: res.data.result.room_name,
                   is_link: 1,
                   wifi_name: wifi_name,
-                  wifi_password: wifi_password
+                  wifi_password: wifi_password,
+                  use_wifi_password: use_wifi_password
                 })
-                wx.startWifi({
-                  success: function () {
-                    wx.connectWifi({
-                      SSID: wifi_name,
-                      BSSID: wifi_mac,
-                      password: use_wifi_password,
-                      success: function (res) {
-                        wx.showToast({
-                          title: 'wifi链接成功',
-                          icon: 'none',
-                          duration: 2000
-                        });
-                        that.setData({
-                          is_link_wifi: 1,
-                        })
-                      },
-                      fail: function (res) {
-                        wx.showToast({
-                          title: '请连接包间wifi',
-                          icon: 'none',
-                          duration: 2000
-                        });
-                      }
-                    })
-                  }
-                })
+                var user_info = wx.getStorageSync("savor_user_info");
+                if (user_info.is_wx_auth != 2) {
+                  that.setData({
+                    wifi_mac: res.data.result.wifi_mac,
+                    showWXAuthLogin: true
+                  })
+                }else{
+                  app.connectHotelwifi(wifi_mac, wifi_name, use_wifi_password)
+                }
+                // wx.startWifi({
+                //   success: function () {
+                //     wx.connectWifi({
+                //       SSID: wifi_name,
+                //       BSSID: wifi_mac,
+                //       password: use_wifi_password,
+                //       success: function (res) {
+                //         wx.showToast({
+                //           title: 'wifi链接成功',
+                //           icon: 'none',
+                //           duration: 2000
+                //         });
+                //         that.setData({
+                //           is_link_wifi: 1,
+                //         })
+                //       },
+                //       fail: function (res) {
+                //         wx.showToast({
+                //           title: '请连接包间wifi',
+                //           icon: 'none',
+                //           duration: 2000
+                //         });
+                //       }
+                //     })
+                //   }
+                // })
               }
             } else {//未获取到酒楼信息
               wx.showToast({
@@ -332,14 +312,10 @@ Page({
     })
   },
   chooseImage: util.throttle(function (res) {//点击事件
-    this.getNetwork(res.currentTarget.dataset.boxmac);
-    var savor_netinfo = wx.getStorageSync("savor_netinfo");
-    var intranet_ip = savor_netinfo['intranet_ip'];
-    var is_network = savor_netinfo['is_network'];
     var that = this;
     var user_info = wx.getStorageSync("savor_user_info");
     
-    if (user_info.is_wx_auth != 2 && is_network==1) {
+    if (user_info.is_wx_auth != 2) {
       that.setData({
         showWXAuthLogin: true
       })
@@ -363,14 +339,9 @@ Page({
 
   //选择视频投屏
   chooseVideo: util.throttle(function (res) {//点击事件
-    this.getNetwork(res.currentTarget.dataset.boxmac);
-    var savor_netinfo = wx.getStorageSync("savor_netinfo");
-    var intranet_ip = savor_netinfo['intranet_ip'];
-    var is_network = savor_netinfo['is_network'];
-
     var that = this;
     var user_info = wx.getStorageSync("savor_user_info");
-    if (user_info.is_wx_auth != 2 && is_network == 1) {
+    if (user_info.is_wx_auth != 2) {
       that.setData({
         showWXAuthLogin: true
       })
@@ -410,7 +381,11 @@ Page({
       }
     });
   },
+
   onGetUserInfo: function (res) {
+    var wifi_mac = res.currentTarget.dataset.wifi_mac;
+    var wifi_name = res.currentTarget.dataset.wifi_name;
+    var use_wifi_password = res.currentTarget.dataset.wifi_password;
     var that = this;
     var user_info = wx.getStorageSync("savor_user_info");
     openid = user_info.openid;
@@ -434,9 +409,12 @@ Page({
           that.setData({
             showWXAuthLogin: false,
           })
+          app.connectHotelwifi(wifi_mac, wifi_name, use_wifi_password)
         }
       })
     }
+    
+    
   },
   //关闭授权弹窗
   closeAuth: function () {

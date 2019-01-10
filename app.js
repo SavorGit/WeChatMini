@@ -1,6 +1,74 @@
 //app.js
 App({
+  connectHotelwifi: function (wifi_mac, wifi_name, use_wifi_password) {
+    if (wifi_mac == '') {//如果后台未填写wifi_mac  获取wifi列表自动链接
+      wx.startWifi({
+        success: function (reswifi) {
 
+          wx.getWifiList({
+            success: function (et) {
+              wx.onGetWifiList(function (ret) {
+                var wifilist = ret.wifiList;
+                //console.log(wifilist);
+                for (var i = 0; i < ret.wifiList.length; i++) {
+                  if (wifi_name == wifilist[i]['SSID']) {
+                    //console.log(wifilist[i]);
+                    wx.connectWifi({
+                      SSID: wifilist[i]['SSID'],
+                      BSSID: wifilist[i]['BSSID'],
+                      password: use_wifi_password,
+                      success: function (ressuc) {
+                        //console.log('wifi连接成功');
+                        that.setData({
+                          is_link_wifi: 1,
+
+                        })
+                      },
+                      fail: function (resfail) {
+                        //console.log(res.errMsg);
+                        that.setData({
+                          is_link_wifi: 0,
+
+                        })
+                      }
+                    })
+                    break;
+                  }
+                }
+              })
+            }
+          })
+        }
+      })
+    } else {//如果后台填写了wifi_mac直接链接
+      wx.startWifi({
+        success: function () {
+          wx.connectWifi({
+            SSID: wifi_name,
+            BSSID: wifi_mac,
+            password: use_wifi_password,
+            success: function (reswifi) {
+              wx.showToast({
+                title: 'wifi链接成功',
+                icon: 'none',
+                duration: 2000
+              });
+              that.setData({
+                is_link_wifi: 1,
+              })
+            },
+            fail: function (resfail) {
+              wx.showToast({
+                title: '请连接包间wifi',
+                icon: 'none',
+                duration: 2000
+              });
+            }
+          })
+        }
+      })
+    }
+  },
   onLaunch: function () {
     // 获取小程序更新机制兼容
     if (wx.canIUse('getUpdateManager')) {
