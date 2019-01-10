@@ -5,6 +5,7 @@ const app = getApp()
 var openid;
 var box_mac;
 var is_view_wifi = 0;
+var intranet_ip;
 Page({
   data: {
     
@@ -20,21 +21,51 @@ Page({
     wifi_name:'',
     wifi_password:'',
     hiddens:true,
-    
   },
- 
+  getNetwork: function (box_mac) {
+    wx.removeStorage({
+      key: 'savor_netinfo'
+    })
+    wx.request({
+      url: 'https://mobile.littlehotspot.com/Smallappsimple/index/getInnerIp',
+      header: {
+        'content-type': 'application/json'
+      },
+      data: {
+        box_mac: box_mac
+      },
+      success: function (res) {
+        if (res.data.code = 10000 && res.data.result.intranet_ip != '') {
+          wx.setStorage({
+            key: 'savor_netinfo',
+            data: {'intranet_ip': res.data.result.intranet_ip,'is_network':1},
+          })
+        } else {//没有拿到机顶盒内网ip
+          wx.showToast({
+            title: '该电视暂不支持投屏',
+            icon: 'none',
+            duration: 2000
+          });
+        }
+      },
+      fail: function (e) {
+        wx.setStorage({
+          key: 'savor_netinfo',
+          data: { 'intranet_ip': '192.168.99.2', 'is_network': 0 },
+        })
+      }
+    })
+  },
   onLoad: function (e) {
     var that = this;
     var scene = decodeURIComponent(e.scene);
     
     if (scene != 'undefined' ){//扫小程序码过来 
-      //console.log(scene);
       box_mac = scene;  
       //box_mac = '00226D655202'     //******上线去掉*/
     }else {//小程序跳转过来
-      
       box_mac = e.box_mac            //*********上线打开
-      //box_mac = '00226D655202'     //******上线去掉*/
+      box_mac = '00226D655202'     //******上线去掉*/
     }
     if (box_mac == undefined || box_mac =='undefined' || box_mac=='' ){
       that.setData({
@@ -300,13 +331,15 @@ Page({
       }
     })
   },
-  
   chooseImage: util.throttle(function (res) {//点击事件
+    this.getNetwork(res.currentTarget.dataset.boxmac);
+    var savor_netinfo = wx.getStorageSync("savor_netinfo");
+    var intranet_ip = savor_netinfo['intranet_ip'];
+    var is_network = savor_netinfo['is_network'];
     var that = this;
-
     var user_info = wx.getStorageSync("savor_user_info");
     
-    if (user_info.is_wx_auth != 2) {
+    if (user_info.is_wx_auth != 2 && is_network==1) {
       that.setData({
         showWXAuthLogin: true
       })
@@ -317,7 +350,7 @@ Page({
       var box_mac = res.currentTarget.dataset.boxmac;
       var openid = res.currentTarget.dataset.openid;
       wx.navigateTo({
-        url: '/pages/launch/pic/index?box_mac=' + box_mac + '&openid=' + openid,
+        url: '/pages/launch/pic/index?box_mac=' + box_mac + '&openid=' + openid + '&intranet_ip=' + intranet_ip,
       })
       that.setData({
         hiddens: true,
@@ -330,9 +363,14 @@ Page({
 
   //选择视频投屏
   chooseVideo: util.throttle(function (res) {//点击事件
+    this.getNetwork(res.currentTarget.dataset.boxmac);
+    var savor_netinfo = wx.getStorageSync("savor_netinfo");
+    var intranet_ip = savor_netinfo['intranet_ip'];
+    var is_network = savor_netinfo['is_network'];
+
     var that = this;
     var user_info = wx.getStorageSync("savor_user_info");
-    if (user_info.is_wx_auth != 2) {
+    if (user_info.is_wx_auth != 2 && is_network == 1) {
       that.setData({
         showWXAuthLogin: true
       })
@@ -343,7 +381,7 @@ Page({
       var box_mac = res.currentTarget.dataset.boxmac;
       var openid = res.currentTarget.dataset.openid;
       wx.navigateTo({
-        url: '/pages/launch/video/index?box_mac=' + box_mac + '&openid=' + openid,
+        url: '/pages/launch/video/index?box_mac=' + box_mac + '&openid=' + openid + '&intranet_ip=' + intranet_ip,
       })
       that.setData({
         hiddens: true,

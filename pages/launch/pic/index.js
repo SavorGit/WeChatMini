@@ -27,58 +27,33 @@ Page({
     var that = this;
     box_mac = options.box_mac;
     openid  = options.openid;
+    intranet_ip = options.intranet_ip;
     that.setData({
       box_mac:box_mac,
       openid:openid
     })
-    wx.request({
-      url: 'https://mobile.littlehotspot.com/Smallappsimple/index/getInnerIp',
-      header: {
-        'content-type': 'application/json'
-      },
-      data:{
-        box_mac:box_mac
-      },
-      success:function(res){
-        if (res.data.code = 10000 && res.data.result.intranet_ip !=''){
-          var intranet_ip = res.data.result.intranet_ip;
-          wx.chooseImage({
-            count: 6, // 默认9
-            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-            success: function (res) {
-              var img_len = res.tempFilePaths.length;
-              //console.log(res.tempFiles[0].size);
-              var tmp_imgs = [];
-              for (var i = 0; i < img_len; i++) {
-                tmp_imgs[i] = { "tmp_img": res.tempFilePaths[i], "resource_size": res.tempFiles[i].size};
-              }
-              that.setData({
-                up_imgs: tmp_imgs,
-                img_lenth: img_len,
-                intranet_ip: intranet_ip,
-              })
-            },
-            fail:function(e){
-              wx.navigateBack({
-                delta: 1,
-              })
-            }
-          })
-          
-        }else {//没有拿到机顶盒内网ip
-          wx.showToast({
-            title: '该电视暂不支持投屏',
-            icon: 'none',
-            duration: 2000
-          });
+    wx.chooseImage({
+      count: 6, // 默认9
+      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      success: function (res) {
+        var img_len = res.tempFilePaths.length;
+        var tmp_imgs = [];
+        for (var i = 0; i < img_len; i++) {
+          tmp_imgs[i] = { "tmp_img": res.tempFilePaths[i], "resource_size": res.tempFiles[i].size };
         }
+        that.setData({
+          up_imgs: tmp_imgs,
+          img_lenth: img_len,
+          intranet_ip: intranet_ip,
+        })
+      },
+      fail: function (e) {
+        wx.navigateBack({
+          delta: 1,
+        })
       }
-
-    })
-
-
-    
+    })  
   },
   up_forscreen:function(e){
     var that= this;

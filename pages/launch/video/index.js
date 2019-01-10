@@ -25,54 +25,33 @@ Page({
     var that = this;
     box_mac = res.box_mac;
     openid = res.openid;
-    
+    intranet_ip = res.intranet_ip;
     that.setData({
       box_mac: box_mac,
       openid: openid
     })
-    wx.request({
-      url: 'https://mobile.littlehotspot.com/Smallappsimple/index/getInnerIp',
-      header: {
-        'content-type': 'application/json'
-      },
-      data: {
-        box_mac: box_mac
-      },
+    var forscreen_id = (new Date()).valueOf();
+    var filename = (new Date()).valueOf();
+    wx.chooseVideo({
+      sourceType: ['album', 'camera'],
+      maxDuration: 60,
+      camera: 'back',
       success: function (res) {
-        
-        if (res.data.code = 10000 && res.data.result.intranet_ip != '') {
-          var intranet_ip = res.data.result.intranet_ip;
-          var forscreen_id = (new Date()).valueOf();
-          var filename = (new Date()).valueOf();
-
-
-          wx.chooseVideo({
-            sourceType: ['album', 'camera'],
-            maxDuration: 60,
-            camera: 'back',
-            success: function (res) {
-              //console.log(res);
-              var video_url = res.tempFilePath
-              that.setData({
-                video_url: video_url,
-                intranet_ip: intranet_ip,
-                openid: openid,
-                box_mac: box_mac,
-                duration: res.duration,
-                video_size: res.size,
-                is_forscreen:1
-              })
-              
-
-              
-            },
-            fail:function(e){
-              wx.navigateBack({
-                delta: 1,
-              })
-            }
-          })
-        }
+        var video_url = res.tempFilePath
+        that.setData({
+          video_url: video_url,
+          intranet_ip: intranet_ip,
+          openid: openid,
+          box_mac: box_mac,
+          duration: res.duration,
+          video_size: res.size,
+          is_forscreen: 1
+        })
+      },
+      fail: function (e) {
+        wx.navigateBack({
+          delta: 1,
+        })
       }
     })
   },
@@ -93,7 +72,6 @@ Page({
     var forscreen_id = (new Date()).valueOf();
     var filename = (new Date()).valueOf();
     
-    //console.log(res);
     wx.uploadFile({
       url: 'http://' + intranet_ip + ':8080/videoH5?deviceId=' + openid + '&deviceName=' + mobile_brand + '&web=true&forscreen_id=' + forscreen_id + '&filename=' + filename + '&device_model=' + mobile_model + '&resource_size=' + resouce_size + '&duration=' + duration + '&action=2&resource_type=2',
       filePath: video_url,
