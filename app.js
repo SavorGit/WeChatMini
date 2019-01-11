@@ -1,34 +1,27 @@
 //app.js
 App({
-  connectHotelwifi: function (wifi_mac, wifi_name, use_wifi_password) {
+  connectHotelwifi: function (wifi_mac, wifi_name, use_wifi_password,that) {
     if (wifi_mac == '') {//如果后台未填写wifi_mac  获取wifi列表自动链接
       wx.startWifi({
         success: function (reswifi) {
-
           wx.getWifiList({
             success: function (et) {
               wx.onGetWifiList(function (ret) {
                 var wifilist = ret.wifiList;
-                //console.log(wifilist);
                 for (var i = 0; i < ret.wifiList.length; i++) {
                   if (wifi_name == wifilist[i]['SSID']) {
-                    //console.log(wifilist[i]);
                     wx.connectWifi({
                       SSID: wifilist[i]['SSID'],
                       BSSID: wifilist[i]['BSSID'],
                       password: use_wifi_password,
                       success: function (ressuc) {
-                        //console.log('wifi连接成功');
                         that.setData({
                           is_link_wifi: 1,
-
                         })
                       },
                       fail: function (resfail) {
-                        //console.log(res.errMsg);
                         that.setData({
                           is_link_wifi: 0,
-
                         })
                       }
                     })
