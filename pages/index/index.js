@@ -181,7 +181,6 @@ Page({
     
     if (is_view_wifi==0){
       that.setData({
-        //is_view_link:1,
         is_view_wifi:1
       })
       is_view_wifi = 1;

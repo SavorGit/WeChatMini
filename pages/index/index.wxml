@@ -8,7 +8,7 @@
     </view>
   </view>
   <view class='page-main'>
-    <view wx:if="{{is_link ==1}}" class='tip'>
+    <view wx:if="{{is_link_wifi ==1}}" class='tip'>
       <label>您已成功链接“{{hotel_name}}”的{{room_name}}电视</label>
     </view>
     <view class='btn' bindtap="chooseImage" data-boxmac="{{box_mac}}" data-openid="{{openid}}">
