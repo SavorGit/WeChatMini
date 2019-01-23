@@ -26,12 +26,9 @@ Page({
   onLoad: function (e) {
     var that = this;
     var scene = decodeURIComponent(e.scene);
-    var is_scan_qrcode = 0;
-    //scene = '00226D655202'//bicao    上线去掉
     
     if (scene != 'undefined' ){//扫小程序码过来 
       box_mac = scene;  
-      is_scan_qrcode = 1;
       //box_mac = '00226D655202'
     }else {//小程序跳转过来
       
@@ -178,9 +175,7 @@ Page({
           }
         })
       }
-    }
-    //扫码埋点
-    if(is_scan_qrcode==1){
+      //扫码埋点
       var user_info = wx.getStorageSync("savor_user_info");
       wx.request({
         url: 'https://mobile.littlehotspot.com/smallapp21/index/recOverQrcodeLog',
@@ -195,6 +190,9 @@ Page({
         },
       })
     }
+  
+      
+    
     
   },
   viewWifi:function(res){
