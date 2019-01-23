@@ -26,11 +26,15 @@ Page({
   onLoad: function (e) {
     var that = this;
     var scene = decodeURIComponent(e.scene);
+    var is_scan_qrcode = 0;
+    //scene = '00226D655202'//bicao    上线去掉
     
     if (scene != 'undefined' ){//扫小程序码过来 
       box_mac = scene;  
+      is_scan_qrcode = 1;
       //box_mac = '00226D655202'
     }else {//小程序跳转过来
+      
       box_mac = e.box_mac
       // box_mac = '00226D655202'//bicao
       // box_mac = '00226D5846EA'//A1
@@ -40,6 +44,7 @@ Page({
         showModal:true
       })
     }else {
+      
       that.setData({
         box_mac: box_mac,
       })
@@ -51,6 +56,7 @@ Page({
           openid: app.globalData.openid
         })
         openid = app.globalData.openid;
+        
         //判断用户是否注册
         wx.request({
           url: 'https://mobile.littlehotspot.com/smallappsimple/User/isJjRegister',
@@ -78,7 +84,7 @@ Page({
       } else {
         app.openidCallback = openid => {
           if (openid != '') {
-            console.log(openid);
+            
             that.setData({
               openid: openid
             })
@@ -173,7 +179,22 @@ Page({
         })
       }
     }
-    
+    //扫码埋点
+    if(is_scan_qrcode==1){
+      var user_info = wx.getStorageSync("savor_user_info");
+      wx.request({
+        url: 'https://mobile.littlehotspot.com/smallapp21/index/recOverQrcodeLog',
+        data: {
+          "openid": user_info.openid,
+          "box_mac": box_mac,
+          "type": 6,
+          "is_overtime": 0
+        },
+        header: {
+          'content-type': 'application/json'
+        },
+      })
+    }
     
   },
   viewWifi:function(res){
