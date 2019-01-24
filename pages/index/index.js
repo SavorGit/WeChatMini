@@ -54,6 +54,20 @@ Page({
         })
         openid = app.globalData.openid;
         
+        //扫码埋点
+
+        wx.request({
+          url: 'https://mobile.littlehotspot.com/smallapp21/index/recOverQrcodeLog',
+          data: {
+            "openid": openid,
+            "box_mac": box_mac,
+            "type": 6,
+            "is_overtime": 0
+          },
+          header: {
+            'content-type': 'application/json'
+          },
+        })
         //判断用户是否注册
         wx.request({
           url: 'https://mobile.littlehotspot.com/smallappsimple/User/isJjRegister',
@@ -86,6 +100,24 @@ Page({
               openid: openid
             })
             openid = openid;
+            
+            //扫码埋点
+            
+            wx.request({
+              url: 'https://mobile.littlehotspot.com/smallapp21/index/recOverQrcodeLog',
+              data: {
+                "openid": openid,
+                "box_mac": box_mac,
+                "type": 6,
+                "is_overtime": 0
+              },
+              header: {
+                'content-type': 'application/json'
+              },
+            })
+          }
+            
+            
             //判断用户是否注册
             wx.request({
               url: 'https://mobile.littlehotspot.com/smallappsimple/User/isJjRegister',
@@ -175,21 +207,7 @@ Page({
           }
         })
       }
-      //扫码埋点
-      var user_info = wx.getStorageSync("savor_user_info");
-      wx.request({
-        url: 'https://mobile.littlehotspot.com/smallapp21/index/recOverQrcodeLog',
-        data: {
-          "openid": user_info.openid,
-          "box_mac": box_mac,
-          "type": 6,
-          "is_overtime": 0
-        },
-        header: {
-          'content-type': 'application/json'
-        },
-      })
-    }
+      
   
       
     
