@@ -19,6 +19,7 @@
       <image src='/images/icon/f6f3ee_video.png'></image>
       <label>视频上电视</label>
     </view>
+    
     <!-- <view class='btn' bindtap='scanCode' >
       <image src='/images/icon/f6f3ee_video.png'></image>
       <label>test</label>
@@ -40,12 +41,12 @@
     </view>
   </view>
   <view class="body-view">
-    <loading hidden="{{hiddens}}" bindchange="loadingChange">加载中...</loading>
+    <loading hidden="{{hiddens}}" bindchange="loadingChange">正在连接包间wifi,请稍后...</loading>
   </view>
 </view>
 
 <!-- 微信授权 -->
-<template is="wxAuthLogin" data='{{show: showWXAuthLogin,wifi_mac:wifi_mac,wifi_name:wifi_name,wifi_password:use_wifi_password}}' />
+<template is="wxAuthLogin" data='{{show: showWXAuthLogin,wifi_mac:wifi_mac,wifi_name:wifi_name,wifi_password:use_wifi_password,intranet_ip:intranet_ip,openid:openid}}' />
 
 <!-- 弹窗 -->
 <modal show='{{showModal}}' width="90vw" height="420rpx" title-text="温馨提示" confirmText="" cancelText="">

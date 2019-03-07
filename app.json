@@ -7,7 +7,8 @@
     "pages/launch/video/upload_success",
     "pages/launch/pic/index",
     "pages/launch/pic/upload_success",
-    "pages/template/commons"
+    "pages/template/commons",
+    "pages/launch/birthday/index"
   ],
   "window": {
     "backgroundTextStyle": "light",

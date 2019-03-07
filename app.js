@@ -1,6 +1,6 @@
 //app.js
 App({
-  connectHotelwifi: function (wifi_mac, wifi_name, use_wifi_password,that) {
+  connectHotelwifi: function (openid,wifi_mac, wifi_name, use_wifi_password, intranet_ip,that) {
     if (wifi_mac == '') {//如果后台未填写wifi_mac  获取wifi列表自动链接
       wx.startWifi({
         success: function (reswifi) {
@@ -17,6 +17,7 @@ App({
                       success: function (ressuc) {
                         that.setData({
                           is_link_wifi: 1,
+                          hiddens:true,
                         })
                       },
                       fail: function (resfail) {
@@ -41,16 +42,40 @@ App({
             BSSID: wifi_mac,
             password: use_wifi_password,
             success: function (reswifi) {
-              wx.showToast({
-                title: 'wifi链接成功',
-                icon: 'none',
-                duration: 2000
-              });
-              that.setData({
-                is_link_wifi: 1,
+              console.log('sssssss');
+              console.log("http://" + intranet_ip + ":8080/h5/stop?deviceId=" + openid + "&web=true");
+              wx.request({
+                url: "http://" + intranet_ip + ":8080/h5/stop?deviceId=" + openid + "&web=true",
+                success: function (res) {
+                  wx.showToast({
+                    title: 'wifi链接成功',
+                    icon: 'none',
+                    duration: 2000
+                  });
+                  that.setData({
+                    is_link_wifi: 1,
+                    hiddens: true,
+                  })
+                },
+                fial: function ({ errMsg }) {
+                  that.setData({
+                    hiddens: true,
+                  })
+                  wx.showToast({
+                    title: 'wifi链接成功,但该电视暂不支持投屏',
+                    icon: 'none',
+                    duration: 2000
+                  });
+                },
               })
+
+
+              
             },
             fail: function (resfail) {
+              that.setData({
+                hiddens:true,
+              })
               wx.showToast({
                 title: '请连接包间wifi',
                 icon: 'none',
