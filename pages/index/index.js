@@ -29,9 +29,10 @@ Page({
     hiddens:true,
     img_disable:false , //照片上电视botton disable
     video_disable:false,
+    showRetryModal: false, //连接WIFI重试弹窗
   },
   onLoad: function (e) {
-    this.setData({ showRetryModal: true});
+    //this.setData({ showRetryModal: true});
     var that = this;
     var scene = decodeURIComponent(e.scene);
     
@@ -148,7 +149,7 @@ Page({
                 })
               }
             });//判断用户是否注册结束
-            // getHotelInfo(box_mac,openid);
+            getHotelInfo(box_mac,openid);
           }
         }
       }
@@ -502,7 +503,13 @@ Page({
 
     })
   },
-
+  netRetry:function(res){
+    var that = this;
+    that.setData({
+      showRetryModal:false,
+    })
+    app.connectHotelwifi(openid, wifi_mac, wifi_name, use_wifi_password, intranet_ip, that)
+  },
   //遥控呼大码
   callQrCode: util.throttle(function (e) {
     openid = e.currentTarget.dataset.openid;
