@@ -149,7 +149,7 @@ Page({
                 })
               }
             });//判断用户是否注册结束
-            getHotelInfo(box_mac,openid);
+            // getHotelInfo(box_mac,openid);
           }
         }
       }

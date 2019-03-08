@@ -1,2 +1,92 @@
 <!--pages/launch/birthday/index.wxml-->
-<text>pages/launch/birthday/index.wxml</text>
+<import src="/pages/template/commons" />
+
+
+<!-- =================================== 星座版 =================================== -->
+<view class="container">
+  <view class='full_width birthday'>
+    <view class='video'>
+      <view class='title theme-font2'>
+        <image src='/images/icon/666666_birthday.png'></image>
+        <label>为TA点歌</label>
+      </view>
+      <view class='list'>
+        <block wx:for="{{happylist}}" wx:key="key" wx:for-item="happyinfo" wx:for-index="index">
+          <view class='music theme7' bindtap='showHappy' data-boxmac="{{box_mac}}" data-openid="{{openid}}" data-vediourl="{{happyinfo.res_url}}" data-happyVedioName="{{happyinfo.file_name}}" data-name="{{happyinfo.name}}">
+            <image src='/images/icon/1cbeb6_misic.png'></image>
+            <label>{{happyinfo.title}}</label>
+            <label>{{happyinfo.sub_title}}</label>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+  <view class='full_width constellation_list'>
+    <!-- <view class='sketch_list'>
+      <view class='constellation theme-font2{{choose_constellid==constelinfo.id? " cur" :""}}' wx:for="{{constellationlist}}" wx:key="key" wx:for-item="constelinfo" wx:for-index="index">
+        <image bindtap='switchConstell' data-constellid="{{constelinfo.id}}" src="{{constelinfo.img_url}}"></image>
+        <label class='title'>{{constelinfo.name}} ({{constelinfo.date}})</label>
+        <label class='summary'>{{constelinfo.intro}}</label>
+      </view>
+    </view> -->
+    <scroll-view class='full_width detailed' scroll-y="true" scroll-with-animation="true">
+      <view class='video_list'>
+        <view class='title theme-font2'>
+          <image src='/images/icon/666666_video.png'></image>
+          <label>相关视频</label>
+        </view>
+        <view class='list'>
+          <view class='video' wx:for="{{videolist}}" wx:key="key" wx:for-item="videoinfo">
+            <view bindtap='showHappy' data-boxmac="{{box_mac}}" data-openid="{{openid}}" data-vediourl="{{videoinfo.video_url}}" data-name="{{videoinfo.name}}">
+              <image src='{{videoinfo.video_img}}'></image>
+              <view class='cover'>
+                <label class='title'></label>
+                <button class='theme-button'>电视播放</button>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <!-- <view class='overall'>
+        <view class='title theme-font2'>
+          <image src='/images/icon/666666_star1.png'></image>
+          <label>星座详情</label>
+        </view>
+        <view class='property theme-font3'>
+          <view class='left'>
+            <label>关键词：{{constellation_detail.keywords}}</label>
+            <label>掌管宫位：{{constellation_detail.house}}</label>
+            <label>主管星：{{constellation_detail.star}}</label>
+            <label>掌管身体：{{constellation_detail.body}}</label>
+          </view>
+          <view class='center'>
+            <label>象征：{{constellation_detail.symbol}}</label>
+            <label>阴阳性：{{constellation_detail.yinyang}}</label>
+            <label>颜色：{{constellation_detail.color}}</label>
+            <label>珠宝：{{constellation_detail.gems}}</label>
+          </view>
+          <view class='right'>
+            <label>四象性：{{constellation_detail.quad}}</label>
+            <label>最大特征：{{constellation_detail.feature}}</label>
+            <label>三方宫：{{constellation_detail.trikona}}</label>
+            <label>幸运号码：{{constellation_detail.lucknum}}</label>
+          </view>
+        </view>
+        <view class='describtion theme-font3'>
+          <label>{{constellation_detail.desc}}
+            <navigator class='theme-font' url="/pages/thematic/birthday/detail?url={{constellation_detail.detail_url}}&constellname={{constellation_detail.name}}">[详情]</navigator>
+          </label>
+        </view>
+      </view> -->
+    </scroll-view>
+  </view>
+</view>
+
+
+<!-- 固定悬浮按钮组 -->
+<view wx:if="{{box_mac !=''}}">
+  <template is="fixedSuspensionButtonGroup" />
+</view>
+
+<!-- 遥控器 -->
+<template is="remoteControlWindow" data='{{popRemoteControlWindow: popRemoteControlWindow, qrcode_img: qrcode_img, box_mac: box_mac, openid: openid, is_open_standard: is_open_standard}}' />

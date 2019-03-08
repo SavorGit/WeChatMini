@@ -12,16 +12,20 @@
       <label>您已成功链接“{{hotel_name}}”的{{room_name}}电视</label>
     </view>
     <button class='btn' bindtap="chooseImage" disabled='{{img_disable}}' data-boxmac="{{box_mac}}" data-openid="{{openid}}">
-      <image src='/images/icon/f6f3ee_pic.png'></image>
+      <image src='/images/icon/FFFFFF_picture.png'></image>
       <label>照片上电视</label>
     </button>
     <button class='btn' bindtap='chooseVideo' disabled='{{video_disable}}' data-boxmac="{{box_mac}}" data-openid="{{openid}}">
-      <image src='/images/icon/f6f3ee_video.png'></image>
+      <image src='/images/icon/FFFFFF_video.png'></image>
       <label>视频上电视</label>
+    </button>
+    <button class='btn' disabled='{{birthday_disable}}' data-boxmac="{{box_mac}}" data-openid="{{openid}}">
+      <image src='/images/icon/FFFFFF_birthday.png'></image>
+      <label>生日歌点播</label>
     </button>
 
     <!-- <view class='btn' bindtap='scanCode' >
-      <image src='/images/icon/f6f3ee_video.png'></image>
+      <image src='/images/icon/FFFFFF_video.png'></image>
       <label>test</label>
     </view> -->
   </view>
@@ -69,6 +73,7 @@
   </view>
   <view style='display: flex;flex-direction: row;align-items: center;'>
     <button style='width: 260rpx; height: 60rpx; line-height: 60rpx; color: #FFF; font-size: 28rpx; margin: auto; padding: 0; border: 0; background-color: rgb(28, 190, 182); border-radius: 30rpx;text-align:center;' bindtap='netRetry'>重试</button>
-    <navigator style='width: 260rpx; height: 60rpx; line-height: 60rpx; color: #FFF; font-size: 28rpx; margin: auto; padding: 0; border: 0; background-color: rgb(28, 190, 182); border-radius: 30rpx;text-align:center;' target="miniProgram" app-id="wxfdf0346934bb672f" path="pages/index/index">进入标准版</navigator>
+    <navigator style='width: 260rpx; height: 60rpx; line-height: 60rpx; color: #FFF; font-size: 28rpx; margin: auto; padding: 0; border: 0; background-color: rgb(28, 190, 182); border-radius: 30rpx;text-align:center;' target="miniProgram" app-id="wxfdf0346934bb672f"
+      path="pages/index/index">进入标准版</navigator>
   </view>
 </modal>

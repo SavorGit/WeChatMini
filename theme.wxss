@@ -72,3 +72,12 @@
 .theme-font3 {
   color: #999;
 }
+
+button[disabled]:not([type]) {
+  color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(28, 190, 182, 0.8);
+}
+
+button[disabled] {
+  color: rgba(28, 190, 182, 0.6);
+}
