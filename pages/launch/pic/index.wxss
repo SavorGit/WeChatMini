@@ -104,7 +104,7 @@ image.pic_show_cur {
 
 .page-bottom .button_2 {
   display: inline-block;
-  width: 49%;
+  width: 32.2%;
   height: 112rpx;
   line-height: 112rpx;
   margin: 0rpx 0.45%;

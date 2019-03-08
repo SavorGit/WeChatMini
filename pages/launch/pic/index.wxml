@@ -60,6 +60,7 @@
   </view>
   <view class='full_width page-bottom'>
     <button class='button_2' bindtap="chooseImage" data-intranet_ip='{{intranet_ip}}' data-boxmac="{{box_mac}}" data-openid="{{openid}}">重选照片</button>
-    <button bindtap='exitForscreen' data-intranet_ip='{{intranet_ip}}' data-boxmac="{{box_mac}}" data-openid="{{openid}}" class='button_2' style='background-color:rgb(153, 153, 153);'>退出投屏</button>
+    <button class='button_2' >再次播放</button>
+    <button class='button_2' style='background-color:rgb(153, 153, 153);' bindtap='exitForscreen' data-intranet_ip='{{intranet_ip}}' data-boxmac="{{box_mac}}" data-openid="{{openid}}" >退出投屏</button>
   </view>
 </view>
