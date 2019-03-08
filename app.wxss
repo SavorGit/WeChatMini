@@ -351,3 +351,6 @@
 
 /* 导入模板样式 */
 @import "pages/template/commons.wxss";
+
+/* @import "pages/template/navigation.wxss"; */
+@import "theme.wxss";

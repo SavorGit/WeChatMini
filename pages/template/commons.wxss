@@ -67,3 +67,161 @@
   width: 50%;
   border-radius: 40rpx;
 }
+
+/* ================================= 固定悬浮按钮组 ================================= */
+
+.fixedSuspensionButtonGroup {
+  position: fixed;
+  right: 80rpx;
+  bottom: 150rpx;
+  width: 50rpx;
+  height: 100rpx;
+  z-index: 99;
+}
+
+.fixedSuspensionButtonGroup > .scan_tdc > button {
+  margin: 0;
+  padding: 0;
+  border: 1rpx solid #1cbeb6;
+  box-shadow: 0 0 15px #1cbeb6;
+  width: 70rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  border-radius: 49%;
+  color: #1cbeb6;
+  font-size: 20rpx;
+}
+
+.fixedSuspensionButtonGroup > .scan_tdc > button > image {
+  width: 96rpx;
+  height: 96rpx;
+  border: 2rpx solid #1cbeb6;
+  box-shadow: 0 0 10px #1cbeb6;
+  border-radius: 49%;
+}
+
+/* ================================= 遥控器窗口 ================================= */
+
+.remoteControlWindow-container {
+  background-color: #1cbeb6;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  border-radius: 20rpx;
+}
+
+.remoteControlWindow-container .button-hover {
+  opacity: 0.7;
+}
+
+.remoteControlWindow-container .remoteControlWindow-control {
+  padding: 20rpx;
+  text-align: right;
+}
+
+.remoteControlWindow-container .remoteControlWindow-control image {
+  width: 30rpx;
+  height: 30rpx;
+}
+
+.remoteControlWindow-container .remoteControlWindow-top {
+  padding: 10rpx 50rpx;
+}
+
+.remoteControlWindow-container .remoteControlWindow-top .opt {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.remoteControlWindow-container .remoteControlWindow-top .opt button {
+  width: 100rpx;
+  height: 100rpx;
+  border: unset;
+  padding: unset;
+  background: unset;
+  border-radius: 60rpx;
+}
+
+.remoteControlWindow-container .remoteControlWindow-top .opt button image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.remoteControlWindow-container .remoteControlWindow-middle {
+  height: 580rpx;
+  padding-top: 90rpx;
+  z-index: 1;
+}
+
+.remoteControlWindow-container .remoteControlWindow-middle button {
+  width: 400rpx;
+  height: 400rpx;
+  border: unset;
+  padding: unset;
+  background: unset;
+  border-radius: 200rpx;
+  z-index: 1;
+}
+
+.remoteControlWindow-container .remoteControlWindow-middle button image {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.remoteControlWindow-container .remoteControlWindow-middle .btn-tip {
+  margin-top: -10rpx;
+  height: 100rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: #fff;
+  z-index: 10;
+}
+
+.remoteControlWindow-container .remoteControlWindow-middle .btn-tip image {
+  width: 50rpx;
+  height: 50rpx;
+  z-index: 10;
+}
+
+.remoteControlWindow-container .remoteControlWindow-bottom {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+}
+
+.remoteControlWindow-container .remoteControlWindow-bottom view {
+  width: 50%;
+  height: 80rpx;
+}
+
+.remoteControlWindow-container .remoteControlWindow-bottom button {
+  width: 260rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 28rpx;
+  border-radius: 15rpx;
+}
+
+.remoteControlWindow-container .remoteControlWindow-bottom navigator {
+  width: 280rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  margin: auto;
+  font-size: 28rpx;
+  border-radius: 15rpx;
+}
+
+.remoteControlWindow-container .remoteControlWindow-bottom navigator.navigator-hover {
+  background-color: #05101a;
+  opacity: 0.7;
+}
