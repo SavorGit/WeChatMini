@@ -19,7 +19,7 @@
       <image src='/images/icon/f6f3ee_video.png'></image>
       <label>视频上电视</label>
     </button>
-    
+
     <!-- <view class='btn' bindtap='scanCode' >
       <image src='/images/icon/f6f3ee_video.png'></image>
       <label>test</label>
@@ -48,7 +48,7 @@
 <!-- 微信授权 -->
 <template is="wxAuthLogin" data='{{show: showWXAuthLogin,wifi_mac:wifi_mac,wifi_name:wifi_name,wifi_password:use_wifi_password,intranet_ip:intranet_ip,openid:openid}}' />
 
-<!-- 弹窗 -->
+<!-- 非正常渠道进入 - 弹窗 -->
 <modal show='{{showModal}}' width="90vw" height="420rpx" title-text="温馨提示" confirmText="" cancelText="">
   <view style='display: flex;flex-direction: column;align-items: center; font-size: 30rpx;'>
     <label style='height: 50rpx;'>使用前需前往[热点投屏]小程序进行链接电视，</label>
@@ -57,5 +57,14 @@
     <navigator target="miniProgram" app-id="wxfdf0346934bb672f" path="pages/index/index">
       <button style='width: 260rpx; height: 60rpx; line-height: 60rpx; color: #FFF; font-size: 28rpx; margin: 30rpx 0 0 0; padding: 0; border: 0; background-color: rgb(28, 190, 182); border-radius: 30rpx;'>前往[热点投屏]</button>
     </navigator>
+  </view>
+</modal>
+
+
+<!-- 连接WIFI重试 - 弹窗 -->
+<modal show='{{showRetryModal}}' width="80vw" height="300rpx" title-text="" confirmText="进入标准版" confirm-color="#1cbeb6" cancelText="重试" cancel-color='#1cbeb6' bindcancel="modalCancel" bindconfirm='modalConfirm'>
+  <view style='display: flex;flex-direction: column;align-items: center; font-size: 30rpx;padding-top:60rpx;'>
+    <label style='height: 50rpx;'>当前无线局域网"XXX"</label>
+    <label style='height: 50rpx;'>暂时无法连接</label>
   </view>
 </modal>

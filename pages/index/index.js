@@ -31,6 +31,7 @@ Page({
     video_disable:false,
   },
   onLoad: function (e) {
+    this.setData({ showRetryModal: true});
     var that = this;
     var scene = decodeURIComponent(e.scene);
     
@@ -147,7 +148,7 @@ Page({
                 })
               }
             });//判断用户是否注册结束
-            getHotelInfo(box_mac,openid);
+            // getHotelInfo(box_mac,openid);
           }
         }
       }
