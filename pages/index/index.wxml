@@ -11,14 +11,14 @@
     <view wx:if="{{is_link_wifi ==1}}" class='tip'>
       <label>您已成功链接“{{hotel_name}}”的{{room_name}}电视</label>
     </view>
-    <view class='btn' bindtap="chooseImage" data-boxmac="{{box_mac}}" data-openid="{{openid}}">
+    <button class='btn' bindtap="chooseImage" disabled='{{img_disable}}' data-boxmac="{{box_mac}}" data-openid="{{openid}}">
       <image src='/images/icon/f6f3ee_pic.png'></image>
       <label>照片上电视</label>
-    </view>
-    <view class='btn' bindtap='chooseVideo' data-boxmac="{{box_mac}}" data-openid="{{openid}}">
+    </button>
+    <button class='btn' bindtap='chooseVideo' disabled='{{video_disable}}' data-boxmac="{{box_mac}}" data-openid="{{openid}}">
       <image src='/images/icon/f6f3ee_video.png'></image>
       <label>视频上电视</label>
-    </view>
+    </button>
     
     <!-- <view class='btn' bindtap='scanCode' >
       <image src='/images/icon/f6f3ee_video.png'></image>

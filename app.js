@@ -1,6 +1,6 @@
 //app.js
 App({
-  connectHotelwifi: function (openid,wifi_mac, wifi_name, use_wifi_password, intranet_ip,that) {
+  connectHotelwifi: function (openid,wifi_mac, wifi_name, use_wifi_password, intranet_ip,that,jump_url='',forscreen_type=1) {
     if (wifi_mac == '') {//如果后台未填写wifi_mac  获取wifi列表自动链接
       wx.startWifi({
         success: function (reswifi) {
@@ -37,12 +37,14 @@ App({
     } else {//如果后台填写了wifi_mac直接链接
       wx.startWifi({
         success: function () {
+          console.log(wifi_name);
+          console.log(wifi_mac);
+          console.log(use_wifi_password);
           wx.connectWifi({
             SSID: wifi_name,
             BSSID: wifi_mac,
             password: use_wifi_password,
             success: function (reswifi) {
-              console.log('sssssss');
               console.log("http://" + intranet_ip + ":8080/h5/stop?deviceId=" + openid + "&web=true");
               wx.request({
                 url: "http://" + intranet_ip + ":8080/h5/stop?deviceId=" + openid + "&web=true",
@@ -52,15 +54,46 @@ App({
                     icon: 'none',
                     duration: 2000
                   });
-                  that.setData({
-                    is_link_wifi: 1,
-                    hiddens: true,
-                  })
+                 
+                  if(jump_url!=''){
+                    
+                    wx.navigateTo({
+                      url: jump_url,
+                    })
+                    if(forscreen_type==1){
+                      that.setData({
+                        img_disable: false,
+                        hiddens: true,
+                        is_link_wifi: 1,
+                      })
+                    }else if(forscreen_type==2){
+                      that.setData({
+                        video_disable: false,
+                        hiddens: true,
+                        is_link_wifi: 1,
+                      })
+                    }
+                    
+                  }else {
+                    that.setData({
+                      is_link_wifi: 1,
+                      hiddens: true,
+                    })
+                  }
                 },
                 fial: function ({ errMsg }) {
-                  that.setData({
-                    hiddens: true,
-                  })
+                  if(forscreen_type==1){
+                    that.setData({
+                      hiddens: true,
+                      img_disable: false,
+                    })
+                  }else if(forscreen_type==2){
+                    that.setData({
+                      hiddens: true,
+                      video_disable: false,
+                    })
+                  }
+                  
                   wx.showToast({
                     title: 'wifi链接成功,但该电视暂不支持投屏',
                     icon: 'none',
@@ -68,13 +101,11 @@ App({
                   });
                 },
               })
-
-
-              
             },
             fail: function (resfail) {
               that.setData({
                 hiddens:true,
+                img_disable: false,
               })
               wx.showToast({
                 title: '请连接包间wifi',

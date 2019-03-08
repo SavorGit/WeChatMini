@@ -5,8 +5,12 @@ const app = getApp()
 var openid;
 var box_mac;
 var is_view_wifi = 0;
+var wifi_password;
 var intranet_ip;
 var wifi_name;
+var wifi_mac;
+var use_wifi_password;
+var forscreen_type;
 Page({
   data: {
     
@@ -23,6 +27,8 @@ Page({
     wifi_name:'',
     wifi_password:'',
     hiddens:true,
+    img_disable:false , //照片上电视botton disable
+    video_disable:false,
   },
   onLoad: function (e) {
     var that = this;
@@ -161,14 +167,14 @@ Page({
                 is_link: 1,
               })
               intranet_ip = res.data.result.intranet_ip;
-              var wifi_name = res.data.result.wifi_name;
-              var wifi_password = res.data.result.wifi_password;
-              var use_wifi_password = wifi_password
+              wifi_name = res.data.result.wifi_name;
+              wifi_password = res.data.result.wifi_password;
+              use_wifi_password = wifi_password
               
               if (wifi_password == '') {
                 wifi_password = "未设置wifi密码";
               }
-              var wifi_mac = res.data.result.wifi_mac;
+              wifi_mac = res.data.result.wifi_mac;
 
               if(wifi_mac==''){//如果后台未填写wifi_mac  获取wifi列表自动链接
                 that.setData({
@@ -280,7 +286,7 @@ Page({
       }
     })
   },
-  chooseImage: util.throttle(function (res) {//点击事件
+  chooseImage: function (res) {//点击事件
     var that = this;
     var user_info = wx.getStorageSync("savor_user_info");
     
@@ -289,72 +295,55 @@ Page({
         showWXAuthLogin: true
       })
     }else {
+      that.setData({
+        img_disable:true,
+        
+      })
       var box_mac = res.currentTarget.dataset.boxmac;
       var openid = res.currentTarget.dataset.openid;
-      wx.request({
-        url: 'https://mobile.littlehotspot.com/Smallappsimple/Index/getHotelInfo',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        data: {
-          box_mac: box_mac,
-        },
-        method: "POST",
-        success:function(res){
-          if(res.code==10000){
-            var wifi_name = res.result.data.wifi_name;
-            wx.startWifi({
-              success: function () {
-                wx.getConnectedWifi({
-                  success: function (res) {
-                    var errCode = res.errCode;
-                    var ssid = res.wifi.SSID;
-                    if (errCode == 0 && wifi_name == ssid) {
-
-                    }else {
-                      //连接当前wifi
-                    }
-                  }
+      
+      wx.startWifi({
+        success: function () {
+          
+          wx.getConnectedWifi({
+            success: function (res) {
+              
+              var errCode = res.errCode;
+              var ssid = res.wifi.SSID;
+              var jump_url = '/pages/launch/pic/index?box_mac=' + box_mac + '&openid=' + openid + '&intranet_ip=' + intranet_ip;
+              if (errCode == 0 && wifi_name == ssid) {
+                
+                wx.navigateTo({
+                  url: jump_url,
                 })
-              },
-              fail: function (res) {
-                console.log('not open wifi');
+                that.setData({
+                  img_disable: false,
+                })
+              } else {
+                //连接当前wifi
+                //连接成功后跳转
+                that.setData({
+                  hiddens: false
+                })
+                console.log('hds');
+                app.connectHotelwifi(openid, wifi_mac, wifi_name, use_wifi_password, intranet_ip, that, jump_url, forscreen_type= 1);
+
+
               }
-            })
-          }else {
-            wx.showToast({
-              title: '该电视暂不支持小程序投屏',
-              icon: 'none',
-              duration: 2000
-            });
-          }
+            },
+            fail:function(res){
+              console.log('getConnectedWifi erro');
+            }
+          })
         },
-        fail:function(){
-          wx.showToast({
-            title: '该电视暂不支持小程序投屏',
-            icon: 'none',
-            duration: 2000
-          });
+        fail: function (res) {
+          console.log('not open wifi');
         }
       })
       //判断是否连接当前包间wifi
-      
-      
-      
-
-
-      that.setData({
-        hiddens: false,
-      })
-      
-      wx.navigateTo({
-        url: '/pages/launch/pic/index?box_mac=' + box_mac + '&openid=' + openid + '&intranet_ip=' + intranet_ip,
-      })
-      that.setData({
-        hiddens: true,
-      })
+        
     }
-  }, 1000),
+  }, 
 
   //选择视频投屏
   chooseVideo: util.throttle(function (res) {//点击事件
@@ -366,6 +355,53 @@ Page({
       })
     }else {
       that.setData({
+        video_disable: true,
+
+      })
+      var box_mac = res.currentTarget.dataset.boxmac;
+      var openid = res.currentTarget.dataset.openid;
+
+      wx.startWifi({
+        success: function () {
+
+          wx.getConnectedWifi({
+            success: function (res) {
+
+              var errCode = res.errCode;
+              var ssid = res.wifi.SSID;
+              var jump_url = '/pages/launch/video/index?box_mac=' + box_mac + '&openid=' + openid + '&intranet_ip=' + intranet_ip;
+              if (errCode == 0 && wifi_name == ssid) {
+
+                wx.navigateTo({
+                  url: jump_url,
+                })
+                that.setData({
+                  video_disable: false,
+                })
+              } else {
+                //连接当前wifi
+                //连接成功后跳转
+                that.setData({
+                  hiddens: false
+                })
+                console.log('hds');
+                app.connectHotelwifi(openid, wifi_mac, wifi_name, use_wifi_password, intranet_ip, that, jump_url,forscreen_type = 2);
+
+
+              }
+            },
+            fail: function (res) {
+              console.log('getConnectedWifi erro');
+            }
+          })
+        },
+        fail: function (res) {
+          console.log('not open wifi');
+        }
+      })
+      //判断是否连接当前包间wifi
+
+      /*that.setData({
         hiddens: false,
       })
       var box_mac = res.currentTarget.dataset.boxmac;
@@ -375,7 +411,7 @@ Page({
       })
       that.setData({
         hiddens: true,
-      })
+      })*/
     }
     
   }, 1000),
@@ -464,5 +500,51 @@ Page({
       },
 
     })
+  },
+
+  //遥控呼大码
+  callQrCode: util.throttle(function (e) {
+    openid = e.currentTarget.dataset.openid;
+    box_mac = e.currentTarget.dataset.box_mac;
+    var qrcode_img = e.currentTarget.dataset.qrcode_img;
+    app.controlCallQrcode(openid, box_mac, qrcode_img);
+  }, 3000),//呼大码结束
+  //打开遥控器
+  openControl: function (e) {
+    var that = this;
+    var qrcode_url = 'https://mobile.littlehotspot.com/Smallapp/index/getBoxQr?box_mac=' + box_mac + '&type=3';
+    that.setData({
+
+      popRemoteControlWindow: true,
+      qrcode_img: qrcode_url
+    })
+  },
+  //关闭遥控
+  closeControl: function (e) {
+    var that = this;
+    that.setData({
+
+      popRemoteControlWindow: false,
+    })
+
+  },
+  //遥控退出投屏
+  exitForscreen: function (e) {
+    openid = e.currentTarget.dataset.openid;
+    box_mac = e.currentTarget.dataset.box_mac;
+    app.controlExitForscreen(openid, box_mac);
+  },
+  //遥控调整音量
+  changeVolume: function (e) {
+    box_mac = e.currentTarget.dataset.box_mac;
+    var change_type = e.currentTarget.dataset.change_type;
+    app.controlChangeVolume(box_mac, change_type);
+
+  },
+  //遥控切换节目
+  changeProgram: function (e) {
+    box_mac = e.currentTarget.dataset.box_mac;
+    var change_type = e.currentTarget.dataset.change_type;
+    app.controlChangeProgram(box_mac, change_type);
   },
 })
