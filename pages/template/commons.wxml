@@ -71,7 +71,7 @@
       </view>
       <view class='remoteControlWindow-bottom'>
         <button bindtap="exitForscreen"   class='theme-button3'>退出投屏</button>
-        <navigator class='theme-button4'  target="miniProgram" app-id="wxfdf0346934bb672f" path="pages/index/index" version="release">前往标准版</navigator>
+        <navigator class='theme-button4'  target="miniProgram" app-id="wxfdf0346934bb672f" path="pages/index/index" version="release">前往普通版</navigator>
       </view>
     </view>
   </modal>
