@@ -19,7 +19,7 @@
       <image src='/images/icon/FFFFFF_video.png'></image>
       <label>视频上电视</label>
     </button>
-    <button class='btn' disabled='{{birthday_disable}}' data-boxmac="{{box_mac}}" data-openid="{{openid}}">
+    <button class='btn' bindtap='showHappy' disabled='{{birthday_disable}}' data-boxmac="{{box_mac}}" data-openid="{{openid}}">
       <image src='/images/icon/FFFFFF_birthday.png'></image>
       <label>生日歌点播</label>
     </button>
@@ -77,3 +77,9 @@
       path="pages/index/index">进入标准版</navigator>
   </view>
 </modal>
+<!-- 固定悬浮按钮组 -->
+<view wx:if="{{box_mac !=''}}">
+  <template is="fixedSuspensionButtonGroup" />
+</view>
+<!-- 遥控器 -->
+<template is="remoteControlWindow" data='{{popRemoteControlWindow: popRemoteControlWindow, qrcode_img: qrcode_img}}' />

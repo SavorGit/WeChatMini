@@ -1,6 +1,6 @@
 //app.js
 App({
-  connectHotelwifi: function (openid,wifi_mac, wifi_name, use_wifi_password, intranet_ip,that,jump_url='',forscreen_type=1) {
+  connectHotelwifi: function (openid,wifi_mac, wifi_name, use_wifi_password, intranet_ip,that,jump_url='',forscreen_type=0) {
     if (wifi_mac == '') {//如果后台未填写wifi_mac  获取wifi列表自动链接
       wx.startWifi({
         success: function (reswifi) {
@@ -52,30 +52,44 @@ App({
                     wx.request({
                       url: "http://" + intranet_ip + ":8080/h5/stop?deviceId=" + openid + "&web=true",
                       success: function (res) {
-                        wx.showToast({
-                          title: 'wifi链接成功',
-                          icon: 'none',
-                          duration: 2000
-                        });
+                        if(forscreen_type==0){
+                          wx.showToast({
+                            title: 'wifi链接成功',
+                            icon: 'none',
+                            duration: 2000
+                          });
+                        }
+                        
                         if (jump_url != '') {
                           wx.navigateTo({
                             url: jump_url,
                           })
-                          if (forscreen_type == 1) {
+                          if (forscreen_type == 1) {//图片投屏
                             that.setData({
                               img_disable: false,
                               hiddens: true,
                               is_link_wifi: 1,
                             })
-                          } else if (forscreen_type == 2) {
+                          } else if (forscreen_type == 2) {//视频投屏
                             that.setData({
                               video_disable: false,
                               hiddens: true,
                               is_link_wifi: 1,
                             })
+                          } else if(forscreen_type==3){  //生日歌点播
+                            that.setData({
+                              birthday_disable:false,
+                              hiddens: true,
+                              is_link_wifi: 1,
+                            })
+                          } else {  //首页加载
+                            that.setData({
+                              is_link_wifi: 1,
+                              hiddens: true,
+                            })
                           }
 
-                        } else {
+                        } else {    //首页加载
                           that.setData({
                             is_link_wifi: 1,
                             hiddens: true,
@@ -83,7 +97,11 @@ App({
                         }
                       },
                       fial: function ({ errMsg }) {
-                        if (forscreen_type == 1) {
+                        if(forscreen_type==0){
+                          that.setData({
+                            hiddens: true,
+                          })
+                        }else if (forscreen_type == 1) {
                           that.setData({
                             hiddens: true,
                             img_disable: false,
@@ -92,6 +110,11 @@ App({
                           that.setData({
                             hiddens: true,
                             video_disable: false,
+                          })
+                        } else if(forscreen_type==3){
+                          that.setData({
+                            hiddens: true,
+                            birthday_disable: false,
                           })
                         }
 
@@ -111,6 +134,7 @@ App({
                       hiddens: true,
                       img_disable: false,
                       video_disable: false,
+                      birthday_disable:false,
                       showRetryModal: true,
                     })
                   }
@@ -122,6 +146,7 @@ App({
                 hiddens:true,
                 img_disable: false,
                 video_disable: false,
+                birthday_disable:false,
                 showRetryModal: true,
               })
             }
@@ -137,11 +162,105 @@ App({
             hiddens: true,
             img_disable: false,
             video_disable: false,
+            birthday_disable:false,
             showRetryModal: true,
           })
         }
       })
     }
+  },
+  //遥控器呼玛
+  controlCallQrcode: function (intranet_ip,openid){
+    wx.request({
+      url: "http://" + intranet_ip + ":8080/showMiniProgramCode?deviceId=" + openid + "&web=true",
+      success: function (res) {
+        wx.showToast({
+          title: '呼玛成功',
+          icon: 'none',
+          duration: 2000
+        });
+      },
+      fial: function ({ errMsg }) {
+        wx.showToast({
+          title: '呼玛失败',
+          icon: 'none',
+          duration: 2000
+        });
+      },
+    })
+  },
+
+  //遥控器退出投屏
+  controlExitForscreen: function (intranet_ip,openid){
+    wx.request({
+      url: "http://" + intranet_ip + ":8080/h5/stop?deviceId=" + openid + "&web=true",
+      success: function (res) {
+        wx.showToast({
+          title: '退出成功',
+          icon: 'none',
+          duration: 2000
+        });
+      },
+      fial: function ({ errMsg }) {
+        wx.showToast({
+          title: '退出失败',
+          icon: 'none',
+          duration: 2000
+        });
+      },
+    })
+
+  },
+  //遥控器控制音量
+  controlChangeVolume: function (intranet_ip, openid, change_type) {
+
+    var timestamp = (new Date()).valueOf();
+    var change_type_name = '';
+    if (change_type == 3) {
+      change_type_name = '减小音量'
+    } else if (change_type == 4) {
+      change_type_name = '增大音量'
+    }
+    wx.request({
+      url: "http://" + intranet_ip + ":8080/volume?action=" + change_type+"&deviceId=" + openid + "&projectId=" + timestamp+"&web=true",
+      success:function(){
+        wx.showToast({
+          title: change_type_name+'成功',
+          icon: 'none',
+          duration: 2000
+        })
+      },fail:function(){
+        wx.showToast({
+          title: change_type_name + '失败',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+      
+      
+    })
+  },
+  //遥控控制节目
+  controlChangeProgram: function (intranet_ip, openid, change_type) {
+    var timestamp = (new Date()).valueOf();
+    wx.request({
+      url: "http://" + intranet_ip + ":8080/switchProgram?action=" + change_type + "&deviceId=" + openid + "&projectId=" + timestamp + "&web=true",
+      success: function () {
+        wx.showToast({
+          title:  '切换成功',
+          icon: 'none',
+          duration: 2000
+        })
+      }, fail: function () {
+        wx.showToast({
+          title:  '切换失败',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+
+
+    })
   },
   onLaunch: function () {
     // 获取小程序更新机制兼容

@@ -1,8 +1,10 @@
 // pages/launch/video/index.js
+const util = require('../../../utils/util.js')
 const app = getApp()
 var openid;
 var box_mac;
 var intranet_ip;
+var qrcode_url;
 Page({
 
   /**
@@ -64,6 +66,9 @@ Page({
     openid = res.currentTarget.dataset.openid;
     box_mac = res.currentTarget.dataset.boxmac;
     intranet_ip = res.currentTarget.dataset.intranet_ip;
+    var user_info = wx.getStorageSync('savor_user_info');
+    var avatarUrl = user_info.avatarUrl;
+    var nickName = user_info.nickName;
     var video_url = res.currentTarget.dataset.video_url;
     var mobile_brand = app.globalData.mobile_brand;
     var mobile_model = app.globalData.mobile_model;
@@ -73,26 +78,35 @@ Page({
     var filename = (new Date()).valueOf();
     
     wx.uploadFile({
-      url: 'http://' + intranet_ip + ':8080/videoH5?deviceId=' + openid + '&deviceName=' + mobile_brand + '&web=true&forscreen_id=' + forscreen_id + '&filename=' + filename + '&device_model=' + mobile_model + '&resource_size=' + resouce_size + '&duration=' + duration + '&action=2&resource_type=2',
+      url: 'http://' + intranet_ip + ':8080/videoH5?deviceId=' + openid + '&deviceName=' + mobile_brand + '&web=true&forscreen_id=' + forscreen_id + '&filename=' + filename + '&device_model=' + mobile_model + '&resource_size=' + resouce_size + '&duration=' + duration + '&action=2&resource_type=2&avatarUrl=' + avatarUrl +"&nickName=" + nickName,
       filePath: video_url,
       name: 'fileUpload',
       success: function (res) {
         that.setData({
           is_upload: 1,
           vedio_url: video_url,
+          filename:filename,
+          resouce_size: resouce_size,
+          duration: duration,
           intranet_ip: intranet_ip,
           hiddens:true,
         })
-      },
-      complete: function (es) {
-        console.log(es)
-      },
-      fial: function ({ errMsg }) {
-        console.log('uploadImage fial,errMsg is', errMsg)
+      },fail: function ({ errMsg }) {
+        that.setData({
+          hiddens: true,
+        })
+        wx.showToast({
+          title: '视频投屏失败',
+          icon: 'none',
+          duration: 2000
+        });
+        wx.reLaunch({
+          url: '/pages/index/index?box_mac='+box_mac,
+        })
       },
     })
   },
-  exitForscreen:function(res){
+  exitForscreend:function(res){
     var that = this;
     openid = res.currentTarget.dataset.openid;
     box_mac = res.currentTarget.dataset.boxmac;
@@ -168,6 +182,98 @@ Page({
         })*/
       }
     })
+  },
+  //重投视频
+  replayVedio:function(res){
+    var that =  this;
+    var user_info = wx.getStorageSync('savor_user_info');
+    var avatarUrl = user_info.avatarUrl;
+    var nickName = user_info.nickName;
+    var intranet_ip  = res.target.dataset.intranet_ip;
+    var mobile_brand = app.globalData.mobile_brand;
+    var mobile_model = app.globalData.mobile_model; 
+    var forscreen_id = (new Date()).valueOf();
+    var filename     = res.target.dataset.filename;
+    var resouce_size = res.target.dataset.resouce_size;
+    var duration     = res.target.dataset.duration;
+    var vedio_url    = res.target.dataset.vedio_url;
+    wx.uploadFile({
+      url: 'http://' + intranet_ip + ':8080/videoH5?deviceId=' + openid + '&deviceName=' + mobile_brand + '&web=true&forscreen_id=' + forscreen_id + '&filename=' + filename + '&device_model=' + mobile_model + '&resource_size=' + resouce_size + '&duration=' + duration + '&action=2&resource_type=2&avatarUrl=' + avatarUrl +"&nickName="+nickName,
+      filePath: vedio_url,
+      name: 'fileUpload',
+      success: function (res) {
+        /*that.setData({
+          is_upload: 1,
+          vedio_url: video_url,
+          filename: filename,
+          resouce_size: resouce_size,
+          duration: duration,
+          intranet_ip: intranet_ip,
+          hiddens: true,
+        })*/
+        wx.showToast({
+          title: '重投成功',
+          icon:'none',
+          duration:2000,
+        })
+      }, fail: function ({ errMsg }) {
+        that.setData({
+          hiddens: true,
+        })
+        wx.showToast({
+          title: '视频投屏失败',
+          icon: 'none',
+          duration: 2000
+        });
+        wx.reLaunch({
+          url: '/pages/index/index?box_mac=' + box_mac,
+        })
+      },
+    })
+
+  },
+
+  //遥控呼大码
+  callQrCode: util.throttle(function (e) {
+    app.controlCallQrcode(intranet_ip,openid);
+  }, 3000),//呼大码结束
+  //打开遥控器
+  openControl: function (e) {
+    var that = this;
+    
+    //默认图
+    qrcode_url = '/images/icon/huma.jpg';
+    that.setData({
+      popRemoteControlWindow: true,
+      qrcode_img: qrcode_url,
+      intranet_ip: intranet_ip
+    })
+  },
+  //关闭遥控
+  closeControl: function (e) {
+    var that = this;
+    that.setData({
+
+      popRemoteControlWindow: false,
+    })
+
+  },
+  //遥控退出投屏
+  exitForscreen: function (e) {
+    app.controlExitForscreen(intranet_ip,openid);
+  },
+  //遥控调整音量
+  changeVolume: function (e) {
+    
+    var change_type = e.currentTarget.dataset.change_type;
+    app.controlChangeVolume(intranet_ip, openid,change_type);
+
+  },
+  //遥控切换节目
+  changeProgram: function (e) {
+    
+    var change_type = e.currentTarget.dataset.change_type;
+    app.controlChangeProgram(intranet_ip, openid, change_type);
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

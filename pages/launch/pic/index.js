@@ -1,9 +1,10 @@
 // pages/launch/pic/index.js
-
+const util = require('../../../utils/util.js')
 const app = getApp()
 var box_mac;
 var openid;
-var intranet_ip
+var intranet_ip;
+var qrcode_url;
 Page({
 
   /**
@@ -62,6 +63,9 @@ Page({
       hiddens:false,
     })
     //console.log(res.detail.value);
+    var user_info = wx.getStorageSync('savor_user_info');
+    var avatarUrl = user_info.avatarUrl;
+    var nickName  = user_info.nickName;
     var img_lenth = e.detail.value.img_lenth;
     var intranet_ip = e.detail.value.intranet_ip;
     var mobile_brand = app.globalData.mobile_brand;
@@ -109,7 +113,7 @@ Page({
       filename_arr[i] = filename;
       
       wx.uploadFile({
-        url: "http://" + intranet_ip + ":8080/picH5?isThumbnail=1&imageId=20170301&deviceId=" + openid + "&deviceName=" + mobile_brand + "&rotation=90&imageType=1&web=true&forscreen_id=" + forscreen_id + '&forscreen_char=' + forscreen_char + '&filename=' + filename + '&device_model=' + mobile_model + '&resource_size=' + img_size +'&action=4&resource_type=0',
+        url: "http://" + intranet_ip + ":8080/picH5?isThumbnail=1&imageId=20170301&deviceId=" + openid + "&deviceName=" + mobile_brand + "&rotation=90&imageType=1&web=true&forscreen_id=" + forscreen_id + '&forscreen_char=' + forscreen_char + '&filename=' + filename + '&device_model=' + mobile_model + '&resource_size=' + img_size +'&action=4&resource_type=0&avatarUrl='+avatarUrl+"&nickName="+nickName+"&forscreen_nums="+img_lenth,
         filePath: img_url,
         name: 'fileUpload',
         success: function (res) {
@@ -174,6 +178,10 @@ Page({
     openid = res.currentTarget.dataset.openid;
     box_mac = res.currentTarget.dataset.boxmac;
     intranet_ip = res.currentTarget.dataset.intranet_ip
+
+    var user_info = wx.getStorageSync('savor_user_info');
+    var avatarUrl = user_info.avatarUrl;
+    var nickName = user_info.nickName;
     var filename = res.currentTarget.dataset.filename;
     var forscreen_char = res.currentTarget.dataset.forscreen_char;
     var resouce_size   = res.currentTarget.dataset.resouce_size;
@@ -186,7 +194,7 @@ Page({
       choose_key:choose_key
     })
     wx.uploadFile({
-      url: "http://" + intranet_ip + ":8080/picH5?isThumbnail=1&imageId=20170301&deviceId=" + openid + "&deviceName=" + mobile_brand + "&rotation=90&imageType=1&web=true&forscreen_id=" + forscreen_id + '&forscreen_char=' + forscreen_char + '&filename=' + filename + '&device_model=' + mobile_model + '&resource_size=' + resouce_size + '&action=2&resource_type=1',
+      url: "http://" + intranet_ip + ":8080/picH5?isThumbnail=1&imageId=20170301&deviceId=" + openid + "&deviceName=" + mobile_brand + "&rotation=90&imageType=1&web=true&forscreen_id=" + forscreen_id + '&forscreen_char=' + forscreen_char + '&filename=' + filename + '&device_model=' + mobile_model + '&resource_size=' + resouce_size + '&action=2&resource_type=1&avatarUrl=' + avatarUrl +"&nickName="+nickName,
       filePath: img_url,
       name: 'fileUpload',
       success: function (res) {
@@ -201,7 +209,7 @@ Page({
     });
   },
 
-  exitForscreen:function(res){
+  exitForscreend:function(res){
     var that = this;
     openid = res.currentTarget.dataset.openid;
     box_mac = res.currentTarget.dataset.boxmac;
@@ -232,7 +240,48 @@ Page({
     
    
   },
+  //遥控呼大码
+  callQrCode: util.throttle(function (e) {
+    app.controlCallQrcode(intranet_ip, openid);
+  }, 3000),//呼大码结束
+  //打开遥控器
+  openControl: function (e) {
+    var that = this;
 
+    //默认图
+    qrcode_url = '/images/icon/huma.jpg';
+    that.setData({
+      popRemoteControlWindow: true,
+      qrcode_img: qrcode_url,
+      intranet_ip: intranet_ip
+    })
+  },
+  //关闭遥控
+  closeControl: function (e) {
+    var that = this;
+    that.setData({
+
+      popRemoteControlWindow: false,
+    })
+
+  },
+  //遥控退出投屏
+  exitForscreen: function (e) {
+    app.controlExitForscreen(intranet_ip, openid);
+  },
+  //遥控调整音量
+  changeVolume: function (e) {
+
+    var change_type = e.currentTarget.dataset.change_type;
+    app.controlChangeVolume(intranet_ip, openid, change_type);
+
+  },
+  //遥控切换节目
+  changeProgram: function (e) {
+
+    var change_type = e.currentTarget.dataset.change_type;
+    app.controlChangeProgram(intranet_ip, openid, change_type);
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

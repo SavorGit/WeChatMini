@@ -11,8 +11,8 @@
         <label>为TA点歌</label>
       </view>
       <view class='list'>
-        <block wx:for="{{happylist}}" wx:key="key" wx:for-item="happyinfo" wx:for-index="index">
-          <view class='music theme7' bindtap='showHappy' data-boxmac="{{box_mac}}" data-openid="{{openid}}" data-vediourl="{{happyinfo.res_url}}" data-happyVedioName="{{happyinfo.file_name}}" data-name="{{happyinfo.name}}">
+        <block wx:for="{{datalist}}" wx:key="key" wx:for-item="happyinfo" wx:for-index="index">
+          <view wx:if="{{happyinfo.type==1}}" class='music theme7' bindtap='showHappy' data-boxmac="{{box_mac}}" data-openid="{{openid}}" data-oss_url="{{happyinfo.oss_url}}" data-media_name="{{happyinfo.media_name}}" data-name="{{happyinfo.name}}">
             <image src='/images/icon/1cbeb6_misic.png'></image>
             <label>{{happyinfo.title}}</label>
             <label>{{happyinfo.sub_title}}</label>
@@ -36,9 +36,9 @@
           <label>相关视频</label>
         </view>
         <view class='list'>
-          <view class='video' wx:for="{{videolist}}" wx:key="key" wx:for-item="videoinfo">
-            <view bindtap='showHappy' data-boxmac="{{box_mac}}" data-openid="{{openid}}" data-vediourl="{{videoinfo.video_url}}" data-name="{{videoinfo.name}}">
-              <image src='{{videoinfo.video_img}}'></image>
+          <view class='video' wx:for="{{datalist}}" wx:key="key" wx:for-item="videoinfo">
+            <view wx:if="{{videoinfo.type==2}}" bindtap='showHappy' data-boxmac="{{box_mac}}" data-openid="{{openid}}" data-oss_url="{{videoinfo.oss_url}}" data-media_name="{{videoinfo.media_name}}">
+              <image src='{{videoinfo.img}}'></image>
               <view class='cover'>
                 <label class='title'></label>
                 <button class='theme-button'>电视播放</button>
