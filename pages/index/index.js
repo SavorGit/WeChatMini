@@ -43,8 +43,8 @@ Page({
     }else {//小程序跳转过来
       
       box_mac = e.box_mac
-      //box_mac ='00226D584279' //演示1
-      box_mac = '00226D655202'//bicao
+      box_mac ='00226D584279' //演示1
+      //box_mac = '00226D655202'//bicao
       // box_mac = '00226D5846EA'//A1
     }
     if (box_mac == undefined || box_mac =='undefined' || box_mac=='' ){
@@ -332,6 +332,8 @@ Page({
                 })
                 that.setData({
                   img_disable: false,
+                  video_disable: false,
+                  birthday_disable: false,
                 })
               } else {
                 //连接当前wifi
@@ -387,7 +389,9 @@ Page({
                   url: jump_url,
                 })
                 that.setData({
+                  img_disable: false,
                   video_disable: false,
+                  birthday_disable: false,
                 })
               } else {
                 //连接当前wifi
@@ -454,7 +458,10 @@ Page({
                   url: jump_url,
                 })
                 that.setData({
+                  img_disable:false,
+                  video_disable:false,
                   birthday_disable: false,
+                  
                 })
               } else {
                 //连接当前wifi
@@ -572,7 +579,7 @@ Page({
         showRetryModal: true,
       })
     }else {
-      app.connectHotelwifi(openid, wifi_mac, wifi_name, use_wifi_password, intranet_ip, that)
+      app.connectHotelwifi(openid, wifi_mac, wifi_name, use_wifi_password, intranet_ip, that,'',0);
     }
     
   },

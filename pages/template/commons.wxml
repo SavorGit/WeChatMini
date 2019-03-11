@@ -60,7 +60,7 @@
         </view>
       </view>
       <view class='remoteControlWindow-middle'>
-        <button bindtap='callQrCode' data-openid='{{openid}}'  data-qrcode_img='/images/icon/dstp.png'>
+        <button bindtap='callQrCode' data-openid='{{openid}}'  data-qrcode_img='/images/imgs/dstp.png'>
           <image src='/images/icon/big-button.png'></image>
           <image src='/images/imgs/dstp.png' style='width: 310rpx; height: 310rpx; padding: 13rpx; border-radius: 50%; top: 33rpx; left: 33rpx; background-color: #FFFFFF;'></image>
         </button>

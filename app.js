@@ -37,9 +37,6 @@ App({
     } else {//如果后台填写了wifi_mac直接链接
       wx.startWifi({
         success: function () {
-          console.log(wifi_name);
-          console.log(wifi_mac);
-          console.log(use_wifi_password);
           wx.connectWifi({
             SSID: wifi_name,
             BSSID: wifi_mac,
@@ -48,7 +45,7 @@ App({
               wx.getConnectedWifi({
                 success:function(scres){
                   if (scres.wifi.SSID == wifi_name){//如果当前连接wifi正确
-                    console.log("http://" + intranet_ip + ":8080/h5/stop?deviceId=" + openid + "&web=true");
+                    //console.log("http://" + intranet_ip + ":8080/h5/stop?deviceId=" + openid + "&web=true");
                     wx.request({
                       url: "http://" + intranet_ip + ":8080/h5/stop?deviceId=" + openid + "&web=true",
                       success: function (res) {
