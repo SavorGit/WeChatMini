@@ -9,12 +9,12 @@
   </view>
   <view class='page-main'>
     <view class='tip'>
-      <!-- <block wx:if="{{is_link_wifi ==1}}"> -->
+      <block wx:if="{{is_link_wifi ==1}}">
         <label>您已成功链接“{{hotel_name}}”的{{room_name}}电视</label>
-      <!-- </block>
+      </block>
       <block wx:else>
-        <label>0</label>
-      </block> -->
+        <label> </label>
+      </block>
     </view>
     <button class='btn' bindtap="chooseImage" disabled='{{img_disable}}' data-boxmac="{{box_mac}}" data-openid="{{openid}}">
       <image src='/images/icon/FFFFFF_picture.png'></image>
@@ -86,9 +86,11 @@
       path="pages/index/index">进入普通版</navigator>
   </view>
 </modal>
+
 <!-- 固定悬浮按钮组 -->
 <view wx:if="{{box_mac !=''}}">
   <template is="fixedSuspensionButtonGroup" />
 </view>
+
 <!-- 遥控器 -->
 <template is="remoteControlWindow" data='{{popRemoteControlWindow: popRemoteControlWindow, qrcode_img: qrcode_img}}' />
