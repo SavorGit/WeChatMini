@@ -49,8 +49,8 @@
 
 .page-main .btn {
   width: 565rpx;
-  height: 240rpx;
-  line-height: 240rpx;
+  height: 200rpx;
+  line-height: 200rpx;
   margin: 25rpx 0rpx;
   background-color: rgb(28, 190, 182);
   border-color: transparent;
@@ -75,7 +75,7 @@
 }
 
 .page-bottom {
-  height: 150rpx;
+  height: 120rpx;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
