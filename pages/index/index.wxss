@@ -82,6 +82,35 @@
   justify-content: flex-end;
 }
 
+.page-bottom .jump-standard {
+  font-size: 28rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page-bottom .jump-standard > label {
+  margin-bottom: 30rpx;
+}
+
+.page-bottom .jump-standard .button {
+  display: block;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 10rpx;
+  padding-right: 10rpx;
+  box-sizing: border-box;
+  text-align: center;
+  text-decoration: none;
+  line-height: 2.55555556;
+  border-radius: 5px;
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+  color: #fff;
+  background-color: #133960;
+}
+
 .page-bottom image {
   width: 48rpx;
   height: 38rpx;

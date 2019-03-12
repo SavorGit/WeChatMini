@@ -30,10 +30,14 @@
     </view> -->
   </view>
   <view class='full_width page-bottom'>
-    <navigator target="miniProgram" app-id="wxfdf0346934bb672f" path="pages/index/index">
+    <!-- <navigator target="miniProgram" app-id="wxfdf0346934bb672f" path="pages/index/index">
       <label>前往「热点投屏」普通版</label>
       <image src='/images/icon/white-right-arrow.png'></image>
-    </navigator>
+    </navigator> -->
+    <view class='full_width jump-standard'>
+      <label>使用其他功能，请前往「热点投屏」普通版</label>
+      <navigator class='button' target="miniProgram" app-id="wxfdf0346934bb672f" path="pages/index/index">前往普通版</navigator>
+    </view>
   </view>
   <view wx:if="{{is_view_wifi ==1}}" class='wifi-tip' style='display:flex;'>
     <view class='wifi-ssid'>
