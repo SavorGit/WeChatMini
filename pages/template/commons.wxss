@@ -73,7 +73,7 @@
 .fixedSuspensionButtonGroup {
   position: fixed;
   right: 80rpx;
-  bottom: 150rpx;
+  bottom: 300rpx;
   width: 50rpx;
   height: 100rpx;
   z-index: 99;
@@ -84,9 +84,9 @@
   padding: 0;
   border: 1rpx solid #1cbeb6;
   box-shadow: 0 0 15px #1cbeb6;
-  width: 90rpx;
-  height: 90rpx;
-  line-height: 90rpx;
+  width: 100rpx;
+  height: 100rpx;
+  line-height: 100rpx;
   border-radius: 49%;
   color: #1cbeb6;
   font-size: 20rpx;

@@ -75,7 +75,7 @@
 }
 
 .page-bottom {
-  height: 120rpx;
+  height: 150rpx;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -94,6 +94,8 @@
 }
 
 .page-bottom .jump-standard .button {
+  width: 170rpx;
+  height: 50rpx;
   display: block;
   position: relative;
   margin-left: auto;
@@ -101,9 +103,10 @@
   padding-left: 10rpx;
   padding-right: 10rpx;
   box-sizing: border-box;
+  font-size: 30rpx;
   text-align: center;
   text-decoration: none;
-  line-height: 2.55555556;
+  line-height: 1.777779;
   border-radius: 5px;
   -webkit-tap-highlight-color: transparent;
   overflow: hidden;
