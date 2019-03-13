@@ -18,6 +18,7 @@ Page({
     video_url:'',
     is_forscreen:0,
     hiddens:true,
+    replay_btn:0,
   },
 
   /**
@@ -186,6 +187,26 @@ Page({
   //重投视频
   replayVedio:function(res){
     var that =  this;
+    that.setData({
+      replay_btn:1,
+    })
+    var djs = 3;
+    that.setData({
+      djs: djs
+    })
+    var timer8_0 = setInterval(function () {
+      djs -= 1;
+      that.setData({
+        djs: djs
+      });
+      if (djs == 0) {
+        that.setData({
+          replay_btn: 0,
+        })
+        clearInterval(timer8_0);
+      }
+
+    }, 1000);
     var user_info = wx.getStorageSync('savor_user_info');
     var avatarUrl = user_info.avatarUrl;
     var nickName = user_info.nickName;
@@ -216,6 +237,7 @@ Page({
           icon:'none',
           duration:2000,
         })
+        
       }, fail: function ({ errMsg }) {
         that.setData({
           hiddens: true,

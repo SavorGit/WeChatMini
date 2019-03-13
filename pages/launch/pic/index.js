@@ -31,7 +31,8 @@ Page({
     intranet_ip = options.intranet_ip;
     that.setData({
       box_mac:box_mac,
-      openid:openid
+      openid:openid,
+      is_btn_disabel:true,
     })
     wx.chooseImage({
       count: 6, // 默认9
@@ -47,6 +48,7 @@ Page({
           up_imgs: tmp_imgs,
           img_lenth: img_len,
           intranet_ip: intranet_ip,
+          is_btn_disabel:false,
         })
       },
       fail: function (e) {
@@ -60,7 +62,7 @@ Page({
     var that= this;
     that.setData({
       is_btn_disabel: true,
-      hiddens:false,
+      hiddens:true,
     })
     //console.log(res.detail.value);
     var user_info = wx.getStorageSync('savor_user_info');
@@ -149,6 +151,9 @@ Page({
       openid: openid,
       intranet_ip: intranet_ip,
       is_btn_disabel: true,
+      up_imgs: [],
+      
+
     })
 
     wx.chooseImage({
@@ -194,7 +199,7 @@ Page({
       choose_key:choose_key
     })
     wx.uploadFile({
-      url: "http://" + intranet_ip + ":8080/picH5?isThumbnail=1&imageId=20170301&deviceId=" + openid + "&deviceName=" + mobile_brand + "&rotation=90&imageType=1&web=true&forscreen_id=" + forscreen_id + '&forscreen_char=' + forscreen_char + '&filename=' + filename + '&device_model=' + mobile_model + '&resource_size=' + resouce_size + '&action=2&resource_type=1&avatarUrl=' + avatarUrl +"&nickName="+nickName,
+      url: "http://" + intranet_ip + ":8080/h5/singleImg?isThumbnail=1&imageId=20170301&deviceId=" + openid + "&deviceName=" + mobile_brand + "&rotation=90&imageType=1&web=true&forscreen_id=" + forscreen_id + '&forscreen_char=' + forscreen_char + '&filename=' + filename + '&device_model=' + mobile_model + '&resource_size=' + resouce_size + '&action=2&resource_type=1&avatarUrl=' + avatarUrl +"&nickName="+nickName,
       filePath: img_url,
       name: 'fileUpload',
       success: function (res) {

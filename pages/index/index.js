@@ -28,9 +28,8 @@ Page({
     wifi_name:'',
     wifi_password:'',
     hiddens:true,
-    img_disable:false , //照片上电视botton disable
-    video_disable:false,
-    showRetryModal: false, //连接WIFI重试弹窗
+    
+    showRetryModal: true, //连接WIFI重试弹窗
   },
   onLoad: function (e) {
     //this.setData({ showRetryModal: true});
@@ -43,7 +42,8 @@ Page({
     }else {//小程序跳转过来
       
       box_mac = e.box_mac
-      box_mac ='00226D584279' //演示1
+      //box_mac ='00226D584279' //演示1
+      //box_mac ='00226D583D92';
       //box_mac = '00226D655202'//bicao
       // box_mac = '00226D5846EA'//A1
     }
@@ -156,6 +156,7 @@ Page({
         }
       }
       function getHotelInfo(box_mac,openid) {//获取链接的酒楼信息
+        
         wx.request({
           url: 'https://mobile.littlehotspot.com/Smallappsimple/Index/getHotelInfo',
           headers: {
@@ -163,6 +164,7 @@ Page({
           },
           data: {
             box_mac: box_mac,
+            
           },
           method: "POST",
           success: function (res) {
@@ -208,6 +210,7 @@ Page({
                     openid: openid
                   })
                   var user_info = wx.getStorageSync("savor_user_info");
+                  
                   if (user_info.is_wx_auth != 2) {
                     that.setData({
                       wifi_mac: res.data.result.wifi_mac,
@@ -573,6 +576,7 @@ Page({
     var that = this;
     that.setData({
       showRetryModal:false,
+      hiddens:false,
     })
     if(wifi_name=='' || wifi_mac==''){
       that.setData({

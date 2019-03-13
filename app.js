@@ -36,107 +36,238 @@ App({
       })
     } else {//如果后台填写了wifi_mac直接链接
       wx.startWifi({
-        success: function () {
+        success: function (rts) {
+         
           wx.connectWifi({
             SSID: wifi_name,
             BSSID: wifi_mac,
             password: use_wifi_password,
             success: function (reswifi) {
-              wx.getConnectedWifi({
-                success:function(scres){
-                  if (scres.wifi.SSID == wifi_name){//如果当前连接wifi正确
-                    //console.log("http://" + intranet_ip + ":8080/h5/stop?deviceId=" + openid + "&web=true");
-                    wx.request({
-                      url: "http://" + intranet_ip + ":8080/h5/stop?deviceId=" + openid + "&web=true",
-                      success: function (res) {
-                        if(forscreen_type==0){
-                          wx.showToast({
-                            title: 'wifi链接成功',
-                            icon: 'none',
-                            duration: 2000
-                          });
-                        }
-                        
-                        if (jump_url != '') {
-                          wx.navigateTo({
-                            url: jump_url,
-                          })
-                          if (forscreen_type == 1) {//图片投屏
-                            that.setData({
-                              img_disable: false,
-                              hiddens: true,
-                              is_link_wifi: 1,
-                            })
-                          } else if (forscreen_type == 2) {//视频投屏
-                            that.setData({
-                              video_disable: false,
-                              hiddens: true,
-                              is_link_wifi: 1,
-                            })
-                          } else if(forscreen_type==3){  //生日歌点播
-                            that.setData({
-                              birthday_disable:false,
-                              hiddens: true,
-                              is_link_wifi: 1,
-                            })
-                          } else {  //首页加载
-                            that.setData({
-                              is_link_wifi: 1,
-                              hiddens: true,
-                            })
-                          }
+             
+              if (reswifi.errCode == 12006){
+                
+                wx.showToast({
+                  title: '请打开您手机的GPS定位开关',
+                  icon: 'none',
+                  
+                  duration: 5000,
+                  
+                })
+                that.setData({
+                  hiddens: true,
+                  img_disable: false,
+                  video_disable: false,
+                  birthday_disable: false,
+                  showRetryModal: true,
+                })
+                
+              } else if (reswifi =='getConnectedWifi erro'){
+                wx.showToast({
+                  title: '请打开您的wifi',
+                  icon: 'none',
+                  duration: 2000
+                });
+                that.setData({
+                  hiddens: true,
+                  img_disable: false,
+                  video_disable: false,
+                  birthday_disable: false,
+                  showRetryModal: true,
+                })
+              }
+              else {
+                wx.getConnectedWifi({
+                  success: function (scres) {
+                    if (scres.wifi.SSID == wifi_name) {//如果当前连接wifi正确
+                      if (forscreen_type == 0) {
+                        wx.showToast({
+                          title: 'wifi链接成功',
+                          icon: 'none',
+                          duration: 5000
+                        });
+                      }
 
-                        } else {    //首页加载
+                      if (jump_url != '') {
+                        wx.navigateTo({
+                          url: jump_url,
+                        })
+                        if (forscreen_type == 1) {//图片投屏
+                          that.setData({
+                            img_disable: false,
+                            video_disable: false,
+                            birthday_disable: false,
+                            hiddens: true,
+                            is_link_wifi: 1,
+                          })
+                        } else if (forscreen_type == 2) {//视频投屏
+                          that.setData({
+                            img_disable: false,
+                            video_disable: false,
+                            birthday_disable: false,
+                            hiddens: true,
+                            is_link_wifi: 1,
+                          })
+                        } else if (forscreen_type == 3) {  //生日歌点播
+                          that.setData({
+                            img_disable: false,
+                            video_disable: false,
+                            birthday_disable: false,
+                            hiddens: true,
+                            is_link_wifi: 1,
+                          })
+                        } else {  //首页加载
                           that.setData({
                             is_link_wifi: 1,
                             hiddens: true,
-                          })
-                        }
-                      },
-                      fial: function ({ errMsg }) {
-                        if(forscreen_type==0){
-                          that.setData({
-                            hiddens: true,
-                          })
-                        }else if (forscreen_type == 1) {
-                          that.setData({
-                            hiddens: true,
                             img_disable: false,
-                          })
-                        } else if (forscreen_type == 2) {
-                          that.setData({
-                            hiddens: true,
                             video_disable: false,
-                          })
-                        } else if(forscreen_type==3){
-                          that.setData({
-                            hiddens: true,
                             birthday_disable: false,
+                            showRetryModal: false, //连接WIFI重试弹窗
                           })
                         }
 
-                        /*wx.showToast({
-                          title: 'wifi链接成功,但该电视暂不支持投屏',
-                          icon: 'none',
-                          duration: 2000
-                        });*/
+                      } else {    //首页加载
                         that.setData({
-                          showRetryModal: true,
-                          wifi_name: wifi_name,
+                          is_link_wifi: 1,
+                          hiddens: true,
+                          img_disable: false,
+                          video_disable: false,
+                          birthday_disable: false,
+                          showRetryModal: false, //连接WIFI重试弹窗
                         })
-                      },
-                    })
-                  }else { //当前连接的wifi不是当前包间wifi
+                      }
+                      /*if(forscreen_type==0){
+                        var time_sec = 6000;
+                      }else {
+                        var time_sec = 0;
+                      }
+                      var timeOut = setTimeout(function () {
+                        wx.request({
+                          url: "http://" + intranet_ip + ":8080/h5Test?deviceId=" + openid + "&web=true",
+                          success: function (res) {
+                            console.log('ddd');
+                            if (forscreen_type == 0) {
+                              wx.showToast({
+                                title: 'wifi链接成功',
+                                icon: 'none',
+                                duration: 5000
+                              });
+                            }
+  
+                            if (jump_url != '') {
+                              wx.navigateTo({
+                                url: jump_url,
+                              })
+                              if (forscreen_type == 1) {//图片投屏
+                                that.setData({
+                                  img_disable: false,
+                                  video_disable: false,
+                                  birthday_disable: false,
+                                  hiddens: true,
+                                  is_link_wifi: 1,
+                                })
+                              } else if (forscreen_type == 2) {//视频投屏
+                                that.setData({
+                                  img_disable: false,
+                                  video_disable: false,
+                                  birthday_disable: false,
+                                  hiddens: true,
+                                  is_link_wifi: 1,
+                                })
+                              } else if (forscreen_type == 3) {  //生日歌点播
+                                that.setData({
+                                  img_disable: false,
+                                  video_disable: false,
+                                  birthday_disable: false,
+                                  hiddens: true,
+                                  is_link_wifi: 1,
+                                })
+                              } else {  //首页加载
+                                that.setData({
+                                  is_link_wifi: 1,
+                                  hiddens: true,
+                                  img_disable: false,
+                                  video_disable: false,
+                                  birthday_disable: false,
+                                  showRetryModal: false, //连接WIFI重试弹窗
+                                })
+                              }
+  
+                            } else {    //首页加载
+                              that.setData({
+                                is_link_wifi: 1,
+                                hiddens: true,
+                                img_disable: false,
+                                video_disable: false,
+                                birthday_disable: false,
+                                showRetryModal: false, //连接WIFI重试弹窗
+                              })
+                            }
+                          },
+                          fail: function ({ errMsg }) {
+  
+                            if (forscreen_type == 0) {
+                              that.setData({
+                                hiddens: true,
+                                img_disable: false,
+                                video_disable: false,
+                                birthday_disable: false,
+                              })
+                            } else if (forscreen_type == 1) {
+                              that.setData({
+                                hiddens: true,
+                                img_disable: false,
+                                video_disable: false,
+                                birthday_disable: false,
+                              })
+                            } else if (forscreen_type == 2) {
+                              that.setData({
+                                hiddens: true,
+                                img_disable: false,
+                                video_disable: false,
+                                birthday_disable: false,
+                              })
+                            } else if (forscreen_type == 3) {
+                              that.setData({
+                                hiddens: true,
+                                img_disable: false,
+                                video_disable: false,
+                                birthday_disable: false,
+                              })
+                            }
+  
+                            
+                            that.setData({
+                              showRetryModal: true,
+                              wifi_name: wifi_name,
+                            })
+                          },
+                        })
+                      }, time_sec)*/
+
+                    } else { //当前连接的wifi不是当前包间wifi
+
+                      that.setData({
+                        
+                        hiddens: true,
+                        img_disable: false,
+                        video_disable: false,
+                        birthday_disable: false,
+                        showRetryModal: true,
+                      })
+                    }
+                  }, fail: function (res) {
                     that.setData({
                       hiddens: true,
                       img_disable: false,
                       video_disable: false,
-                      birthday_disable:false,
+                      birthday_disable: false,
                       showRetryModal: true,
                     })
                   }
-                }
-              })  
+                }) 
+              }
+              
             },
             fail: function (resfail) {
               that.setData({
@@ -171,11 +302,20 @@ App({
     wx.request({
       url: "http://" + intranet_ip + ":8080/showMiniProgramCode?deviceId=" + openid + "&web=true",
       success: function (res) {
-        wx.showToast({
-          title: '呼玛成功',
-          icon: 'none',
-          duration: 2000
-        });
+        if (res.data.result==0){
+          wx.showToast({
+            title: '呼玛成功',
+            icon: 'none',
+            duration: 2000
+          });
+        }else {
+          wx.showToast({
+            title: '呼玛失败',
+            icon: 'none',
+            duration: 2000
+          });
+        }
+       
       },
       fial: function ({ errMsg }) {
         wx.showToast({
@@ -220,15 +360,24 @@ App({
     }
     wx.request({
       url: "http://" + intranet_ip + ":8080/volume?action=" + change_type+"&deviceId=" + openid + "&projectId=" + timestamp+"&web=true",
-      success:function(){
-        wx.showToast({
-          title: change_type_name+'成功',
-          icon: 'none',
-          duration: 2000
-        })
+      success:function(res){
+        if (res.data.result==0){
+          wx.showToast({
+            title: change_type_name + '成功',
+            icon: 'none',
+            duration: 2000
+          })
+        }else {
+          wx.showToast({
+            title: '投屏过程中才可控制音量',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+        
       },fail:function(){
         wx.showToast({
-          title: change_type_name + '失败',
+          title: '投屏过程中才可控制音量',
           icon: 'none',
           duration: 2000
         })
@@ -242,15 +391,24 @@ App({
     var timestamp = (new Date()).valueOf();
     wx.request({
       url: "http://" + intranet_ip + ":8080/switchProgram?action=" + change_type + "&deviceId=" + openid + "&projectId=" + timestamp + "&web=true",
-      success: function () {
-        wx.showToast({
-          title:  '切换成功',
-          icon: 'none',
-          duration: 2000
-        })
+      success: function (res) {
+        if (res.data.result==0){
+          wx.showToast({
+            title: '切换成功',
+            icon: 'none',
+            duration: 2000
+          })
+        }else {
+          wx.showToast({
+            title: '电视投屏中，切换无效',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+        
       }, fail: function () {
         wx.showToast({
-          title:  '切换失败',
+          title:  '电视投屏中，切换无效',
           icon: 'none',
           duration: 2000
         })
