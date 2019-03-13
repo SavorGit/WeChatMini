@@ -10,9 +10,9 @@
   <view class='page-main'>
     <view class='tip'>
 
-      <!-- <block wx:if="{{is_link_wifi ==1}}"> -->
-        <label wx:if="{{is_link_wifi ==1}}">您已成功链接“{{hotel_name}}”的{{room_name}}电视</label>
-      <!-- </block>-->
+      <block wx:if="{{is_link_wifi ==1}}">
+        <label>您已成功链接“{{hotel_name}}”的{{room_name}}电视</label>
+      </block>
 
       <block wx:else>
         <label> </label>
