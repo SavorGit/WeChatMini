@@ -55,6 +55,7 @@ Page({
       
       that.setData({
         box_mac: box_mac,
+        hiddens:false,
       })
       wx.hideShareMenu();
 
@@ -176,6 +177,7 @@ Page({
 
               if (wifi_name == '' || wifi_mac==''){
                 that.setData({
+                  hiddens:true,
                   showRetryModal:true
                 })
               }else {
@@ -213,6 +215,7 @@ Page({
                   
                   if (user_info.is_wx_auth != 2) {
                     that.setData({
+                      hiddens:true,
                       wifi_mac: res.data.result.wifi_mac,
                       showWXAuthLogin: true
                     })
