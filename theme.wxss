@@ -56,7 +56,10 @@
   color: #fff;
   background-color: #05101a;
 }
-
+.theme-button5 {
+  color: #fff;
+  background-color: #133960;
+}
 .theme-font {
   color: #1cbeb6;
 }

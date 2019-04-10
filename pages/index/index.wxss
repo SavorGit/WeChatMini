@@ -92,7 +92,13 @@
 .page-bottom .jump-standard > label {
   margin-bottom: 30rpx;
 }
-
+.page-bottom .jump-standard .buttons {
+  width: 70%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
 .page-bottom .jump-standard .button {
   width: 170rpx;
   height: 50rpx;

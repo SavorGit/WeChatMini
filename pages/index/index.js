@@ -12,6 +12,8 @@ var wifi_mac;
 var use_wifi_password;
 var forscreen_type;
 var qrcode_url;
+var common_appid = app.globalData.common_appid;
+var rest_appid   = app.globalData.rest_appid;
 Page({
   data: {
     
@@ -35,7 +37,10 @@ Page({
     //this.setData({ showRetryModal: true});
     var that = this;
     var scene = decodeURIComponent(e.scene);
-    
+    that.setData({
+      common_appid: common_appid,
+      rest_appid: rest_appid,
+    })
     if (scene != 'undefined' ){//扫小程序码过来 
       box_mac = scene;  
       //box_mac = '00226D655202'

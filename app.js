@@ -497,5 +497,7 @@ App({
     box_mac: '',
     mobile_brand: '',
     mobile_model: '',
+    common_appid:'wxfdf0346934bb672f',
+    rest_appid:'wxc395eb4b44563af1'
   }
 })
