@@ -219,6 +219,7 @@ Page({
     var resouce_size = res.target.dataset.resouce_size;
     var duration     = res.target.dataset.duration;
     var vedio_url    = res.target.dataset.vedio_url;
+    var box_mac      = res.target.dataset.box_mac;
     wx.uploadFile({
       url: 'http://' + intranet_ip + ':8080/videoH5?deviceId=' + openid + '&deviceName=' + mobile_brand + '&web=true&forscreen_id=' + forscreen_id + '&filename=' + filename + '&device_model=' + mobile_model + '&resource_size=' + resouce_size + '&duration=' + duration + '&action=2&resource_type=2&avatarUrl=' + avatarUrl +"&nickName="+nickName,
       filePath: vedio_url,
@@ -248,6 +249,7 @@ Page({
           icon: 'none',
           duration: 2000
         });
+        
         wx.reLaunch({
           url: '/pages/index/index?box_mac=' + box_mac,
         })
