@@ -127,13 +127,16 @@ Page({
           duration: 2000
         });
       },
-      fial: function ({ errMsg }) {
-
+      fail: function ({ errMsg }) {
+        
         wx.showToast({
           title: '退出失败',
           icon: 'none',
           duration: 2000
         });
+        wx.reLaunch({
+          url: '/pages/index/index?box_mac=' + box_mac,
+        })
       },
     })
   },

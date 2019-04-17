@@ -124,8 +124,8 @@ Page({
         complete: function (es) {
           console.log(es)
         },
-        fial: function ({ errMsg }) {
-          console.log('uploadImage fial,errMsg is', errMsg)
+        fail: function ({ errMsg }) {
+          console.log('uploadImage fail,errMsg is', errMsg)
         },
       });
     }
@@ -208,8 +208,13 @@ Page({
       complete: function (es) {
         console.log(es)
       },
-      fial: function ({ errMsg }) {
-        console.log('uploadImage fial,errMsg is', errMsg)
+      fail: function ({ errMsg }) {
+        wx.showToast({
+          title: '投屏失败,请检查您链接的的wifi',
+          icon: 'none',
+          duration: 2000
+        });
+        
       },
     });
   },
@@ -233,13 +238,16 @@ Page({
           duration: 2000
         });
       },
-      fial: function ({ errMsg }) {
+      fail: function ({ errMsg }) {
         
         wx.showToast({
           title: '退出失败',
           icon: 'none',
           duration: 2000
         });
+        wx.reLaunch({
+          url: '/pages/index/index?box_mac=' + box_mac,
+        })
       },
     })
     
