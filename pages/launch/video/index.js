@@ -19,6 +19,7 @@ Page({
     is_forscreen:0,
     hiddens:true,
     replay_btn:0,
+    is_open_control:false,
   },
 
   /**
@@ -268,14 +269,15 @@ Page({
     that.setData({
       popRemoteControlWindow: true,
       qrcode_img: qrcode_url,
-      intranet_ip: intranet_ip
+      intranet_ip: intranet_ip,
+      is_open_control:true,
     })
   },
   //关闭遥控
   closeControl: function (e) {
     var that = this;
     that.setData({
-
+      is_open_control:false,
       popRemoteControlWindow: false,
     })
 

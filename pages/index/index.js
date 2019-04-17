@@ -30,6 +30,7 @@ Page({
     wifi_name:'',
     wifi_password:'',
     hiddens:true,
+    is_view_rest:1,
     
     showRetryModal: true, //连接WIFI重试弹窗
   },
@@ -54,6 +55,7 @@ Page({
     }
     if (box_mac == undefined || box_mac =='undefined' || box_mac=='' ){
       that.setData({
+        is_view_rest:0,
         showModal:true
       })
     }else {
@@ -182,6 +184,7 @@ Page({
 
               if (wifi_name == '' || wifi_mac==''){
                 that.setData({
+                  is_view_rest :0,
                   hiddens:true,
                   showRetryModal:true
                 })
