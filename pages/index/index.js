@@ -221,7 +221,7 @@ Page({
                   })
                   var user_info = wx.getStorageSync("savor_user_info");
                   
-                  if (user_info.is_wx_auth != 2) {
+                  if (user_info.is_wx_auth != 3) {
                     that.setData({
                       hiddens:true,
                       wifi_mac: res.data.result.wifi_mac,
@@ -318,7 +318,7 @@ Page({
     var that = this;
     var user_info = wx.getStorageSync("savor_user_info");
     
-    if (user_info.is_wx_auth != 2) {
+    if (user_info.is_wx_auth != 3) {
       that.setData({
         showWXAuthLogin: true
       })
@@ -376,7 +376,7 @@ Page({
   chooseVideo: util.throttle(function (res) {//点击事件
     var that = this;
     var user_info = wx.getStorageSync("savor_user_info");
-    if (user_info.is_wx_auth != 2) {
+    if (user_info.is_wx_auth != 3) {
       that.setData({
         showWXAuthLogin: true
       })
@@ -445,7 +445,7 @@ Page({
     var that = this;
     var user_info = wx.getStorageSync("savor_user_info");
 
-    if (user_info.is_wx_auth != 2) {
+    if (user_info.is_wx_auth != 3) {
       that.setData({
         showWXAuthLogin: true
       })
@@ -520,7 +520,6 @@ Page({
   },
 
   onGetUserInfo: function (res) {
-    console.log(res);
     var wifi_mac = res.currentTarget.dataset.wifi_mac;
     var wifi_name = res.currentTarget.dataset.wifi_name;
     var use_wifi_password = res.currentTarget.dataset.wifi_password;
@@ -532,7 +531,7 @@ Page({
     var user_info = wx.getStorageSync("savor_user_info");
     openid = user_info.openid;
     if (res.detail.errMsg == 'getUserInfo:ok') {
-      wx.request({
+      /*wx.request({
         url: 'https://mobile.littlehotspot.com/Smallappsimple/User/register',
         data: {
           'openid': openid,
@@ -553,6 +552,53 @@ Page({
             hiddens:false,
           })
           app.connectHotelwifi(openid, wifi_mac, wifi_name, use_wifi_password, intranet_ip,that)
+        }
+      })*/
+      wx.getUserInfo({
+        success(rets) {
+          wx.request({
+            url: 'https://mobile.littlehotspot.com/Smallappsimple/User/registerCom',
+            data: {
+              'openid': openid,
+              'avatarUrl': rets.userInfo.avatarUrl,
+              'nickName': rets.userInfo.nickName,
+              'gender': rets.userInfo.gender,
+              'session_key': app.globalData.session_key,
+              'iv': rets.iv,
+              'encryptedData': rets.encryptedData
+            },
+            header: {
+              'content-type': 'application/json'
+            },
+            success: function (rs) {
+              if(rs.data.code==10000){
+                wx.setStorage({
+                  key: 'savor_user_info',
+                  data: rs.data.result,
+                });
+                that.setData({
+                  showWXAuthLogin: false,
+                  hiddens: false,
+                })
+                app.connectHotelwifi(openid, wifi_mac, wifi_name, use_wifi_password, intranet_ip, that)
+              }else {
+                wx.showToast({
+                  title: '微信授权登陆失败，请重试',
+                  icon: 'none',
+                  duration: 2000,
+
+                })
+              }
+
+            },
+            fail: function (res) {
+              wx.showToast({
+                title: '微信登陆失败，请重试',
+                icon: 'none',
+                duration: 2000
+              });
+            }
+          })
         }
       })
     }
