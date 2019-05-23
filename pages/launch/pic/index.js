@@ -36,8 +36,9 @@ Page({
     })
     wx.chooseImage({
       count: 6, // 默认9
-      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      sizeType: ['original'], // 可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      
       success: function (res) {
         var img_len = res.tempFilePaths.length;
         var tmp_imgs = [];
@@ -109,6 +110,7 @@ Page({
     var filename_arr = [];
     
     for (var i = 0; i < img_lenth; i++) {
+      
       var img_url = upimgs[i].img_url;
       var img_size = upimgs[i].img_size;
       var filename = (new Date()).valueOf();
@@ -119,6 +121,7 @@ Page({
         filePath: img_url,
         name: 'fileUpload',
         success: function (res) {
+          console.log(filename_arr);
           console.log(res)
         },
         complete: function (es) {
@@ -128,8 +131,14 @@ Page({
           console.log('uploadImage fail,errMsg is', errMsg)
         },
       });
+      sleep(1);
     }
-    
+    function sleep(delay) {
+      var start = (new Date()).getTime();
+      while ((new Date()).getTime() - start < delay) {
+        continue;
+      }
+    }
     
     that.setData({
       up_imgs: upimgs,
@@ -158,7 +167,7 @@ Page({
 
     wx.chooseImage({
       count: 6, // 默认9
-      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      sizeType: ['original'], // 可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
       success: function (res) {
         var img_len = res.tempFilePaths.length;

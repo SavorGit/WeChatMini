@@ -38,6 +38,7 @@ Page({
     var filename = (new Date()).valueOf();
     wx.chooseVideo({
       sourceType: ['album', 'camera'],
+      compressed:false,
       maxDuration: 60,
       camera: 'back',
       success: function (res) {
@@ -154,6 +155,7 @@ Page({
     var filename = (new Date()).valueOf();
     wx.chooseVideo({
       sourceType: ['album', 'camera'],
+      compressed: false,
       maxDuration: 60,
       camera: 'back',
       success: function (res) {
