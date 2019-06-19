@@ -1,5 +1,187 @@
 //app.js
 App({
+  linkHotelWifi: function (box_mac,wifi_mac, wifi_name, use_wifi_password, that,system_type){
+    
+    wx.startWifi({
+      success: function (rts) {
+        wx.connectWifi({
+          SSID: wifi_name,
+          BSSID: wifi_mac,
+          password: use_wifi_password,
+          success: function (reswifi) {
+            var err_info = JSON.stringify(reswifi);
+            //console.log(reswifi)
+            if (system_type==1 &&  reswifi.errCode == 12006) {//链接报错
+              wx.request({
+                url: 'https://mobile.littlehotspot.com/Smallappsimple/Index/recordWifiErr',
+                data: {
+                  err_info: err_info,
+                  box_mac:box_mac
+                }
+              })
+              wx.showToast({
+                title: 'wifi链接失败或您的手机未打开GPS定位',
+                icon: 'none',
+
+                duration: 5000,
+
+              })
+              that.setData({
+                hiddens: true,
+                img_disable: false,
+                video_disable: false,
+                birthday_disable: false,
+                showRetryModal: true,
+              })
+              
+              
+              /*wx.request({
+                url: 'https://mobile.littlehotspot.com/Smallappsimple/Index/recordWifiErr',
+
+              })*/
+            } else if (reswifi == 'getConnectedWifi erro') {
+              wx.request({
+                url: 'https://mobile.littlehotspot.com/Smallappsimple/Index/recordWifiErr',
+                data: {
+                  err_info: err_info,
+                  box_mac: box_mac
+                }
+              })
+              wx.showToast({
+                title: 'wifi链接失败',
+                icon: 'none',
+                duration: 2000
+              });
+              that.setData({
+                hiddens: true,
+                img_disable: false,
+                video_disable: false,
+                birthday_disable: false,
+                showRetryModal: true,
+              })
+            } else if (reswifi.wifiMsg =='target wifi is already connected.'){
+              wx.showToast({
+                title: 'wifi链接成功',
+                icon: 'none',
+                duration: 2000
+              });
+              that.setData({
+                is_link_wifi: 1,
+                hiddens: true,
+                img_disable: false,
+                video_disable: false,
+                birthday_disable: false,
+                showRetryModal: false, //连接WIFI重试弹窗
+                wifiCloseModal:false,
+              })
+            } else {
+              if (system_type == 2) {//ios
+                wx.onWifiConnected(result => {
+                  if (result.wifi.SSID === wifi_name) {
+                    wx.showToast({
+                      title: 'wifi链接成功',
+                      icon: 'none',
+                      duration: 2000
+                    });
+                    that.setData({
+                      is_link_wifi: 1,
+                      hiddens: true,
+                      img_disable: false,
+                      video_disable: false,
+                      birthday_disable: false,
+                      showRetryModal: false, //连接WIFI重试弹窗
+                    })
+                  } else {
+                    
+                    wx.showToast({
+                      title: 'wifi链接失败',
+                      icon: 'none',
+                      duration: 2000
+                    });
+                    that.setData({
+                      hiddens: true,
+                      img_disable: false,
+                      video_disable: false,
+                      birthday_disable: false,
+                      showRetryModal: true,
+                    })
+                  }
+                })
+              } else {//Android
+                wx.showToast({
+                  title: 'wifi链接成功',
+                  icon: 'none',
+                  duration: 2000
+                });
+                that.setData({
+                  is_link_wifi: 1,
+                  hiddens: true,
+                  img_disable: false,
+                  video_disable: false,
+                  birthday_disable: false,
+                  showRetryModal: false, //连接WIFI重试弹窗
+                  wifiCloseModal: false,
+                })
+              }
+
+              
+            }
+          },fail:function(rtt){
+            var err_info = JSON.stringify(rtt);
+            wx.request({
+              url: 'https://mobile.littlehotspot.com/Smallappsimple/Index/recordWifiErr',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              
+              method: "POST",
+              data: {
+                err_info: err_info,
+                box_mac: box_mac
+              }
+            })
+            wx.showToast({
+              title: 'wifi链接失败',
+              icon: 'none',
+              duration: 2000
+            });
+            that.setData({
+              hiddens: true,
+              img_disable: false,
+              video_disable: false,
+              birthday_disable: false,
+              showRetryModal: true,
+            })
+          }
+        }) 
+      },
+      fail:function (res){//startwifi error
+        var err_info = JSON.stringify(res);
+        wx.request({
+          url: 'https://mobile.littlehotspot.com/Smallappsimple/Index/recordWifiErr',
+          data: {
+            err_info: err_info,
+            box_mac: box_mac
+          }
+        })
+        wx.showToast({
+          title: 'wifi链接失败',
+          icon: 'none',
+          duration: 2000
+        });
+        that.setData({
+          hiddens: true,
+          img_disable: false,
+          video_disable: false,
+          birthday_disable: false,
+          showRetryModal: true,
+        })
+      }
+    })
+    
+    var link_hotel_wifi = wx.getStorageSync('link_hotel_wifi');
+    return link_hotel_wifi
+  },
   connectHotelwifi: function (openid,wifi_mac, wifi_name, use_wifi_password, intranet_ip,that,jump_url='',forscreen_type=0) {
     if (wifi_mac == '') {//如果后台未填写wifi_mac  获取wifi列表自动链接
       wx.startWifi({
@@ -47,7 +229,7 @@ App({
               if (reswifi.errCode == 12006){
                 
                 wx.showToast({
-                  title: '请打开您手机的GPS定位开关',
+                  title: 'wifi链接失败或您的手机未打开GPS定位',
                   icon: 'none',
                   
                   duration: 5000,
@@ -123,6 +305,7 @@ App({
                             video_disable: false,
                             birthday_disable: false,
                             showRetryModal: false, //连接WIFI重试弹窗
+                            wifiCloseModal: false,
                           })
                         }
 
@@ -134,6 +317,7 @@ App({
                           video_disable: false,
                           birthday_disable: false,
                           showRetryModal: false, //连接WIFI重试弹窗
+                          wifiCloseModal: false,
                         })
                       }
                       /*if(forscreen_type==0){
@@ -297,20 +481,20 @@ App({
       })
     }
   },
-  //遥控器呼玛
+  //遥控器呼码
   controlCallQrcode: function (intranet_ip,openid){
     wx.request({
       url: "http://" + intranet_ip + ":8080/showMiniProgramCode?deviceId=" + openid + "&web=true",
       success: function (res) {
         if (res.data.result==0){
           wx.showToast({
-            title: '呼玛成功',
+            title: '呼码成功',
             icon: 'none',
             duration: 2000
           });
         }else {
           wx.showToast({
-            title: '呼玛失败',
+            title: '呼码失败',
             icon: 'none',
             duration: 2000
           });
@@ -319,7 +503,7 @@ App({
       },
       fial: function ({ errMsg }) {
         wx.showToast({
-          title: '呼玛失败',
+          title: '呼码失败',
           icon: 'none',
           duration: 2000
         });

@@ -12,6 +12,7 @@ var wifi_mac;
 var use_wifi_password;
 var forscreen_type;
 var qrcode_url;
+var type = 6;
 var common_appid = app.globalData.common_appid;
 var rest_appid   = app.globalData.rest_appid;
 Page({
@@ -33,17 +34,24 @@ Page({
     is_view_rest:1,
     
     showRetryModal: true, //连接WIFI重试弹窗
+    wifiCloseModal:false,
   },
   onLoad: function (e) {
     //this.setData({ showRetryModal: true});
     var that = this;
     var scene = decodeURIComponent(e.scene);
+    
     that.setData({
       common_appid: common_appid,
       rest_appid: rest_appid,
     })
     if (scene != 'undefined' ){//扫小程序码过来 
-      box_mac = scene;  
+      var scene_arr = scene.split('_');
+      box_mac = scene_arr[0];
+      type    = scene_arr[1];  
+      if (typeof (type) =='undefined'){
+        type = 6;
+      }
       //box_mac = '00226D655202'
     }else {//小程序跳转过来
       
@@ -52,6 +60,8 @@ Page({
       //box_mac ='00226D583D92';
       //box_mac = '00226D655202'//bicao
       // box_mac = '00226D5846EA'//A1
+      //box_mac ='00226D65522A'
+      //box_mac = '00226D655662'
     }
     if (box_mac == undefined || box_mac =='undefined' || box_mac=='' ){
       that.setData({
@@ -80,7 +90,7 @@ Page({
           data: {
             "openid": openid,
             "box_mac": box_mac,
-            "type": 6,
+            "type": type,
             "is_overtime": 0
           },
           header: {
@@ -127,7 +137,7 @@ Page({
               data: {
                 "openid": openid,
                 "box_mac": box_mac,
-                "type": 6,
+                "type": type,
                 "is_overtime": 0
               },
               header: {
@@ -163,6 +173,7 @@ Page({
           }
         }
       }
+      
       function getHotelInfo(box_mac,openid) {//获取链接的酒楼信息
         
         wx.request({
@@ -228,10 +239,61 @@ Page({
                       showWXAuthLogin: true
                     })
                   } else {
+                    
                     that.setData({
                       hiddens: false,
                     })
-                    app.connectHotelwifi(openid, wifi_mac, wifi_name, use_wifi_password, intranet_ip, that)
+                    wx.getSystemInfo({
+                      success: function (res) {
+                        if (res.system.indexOf("Android") > -1) {//安卓手机
+                          if (res.wifiEnabled==false){
+                            wx.showToast({
+                              title: '请打开您的wifi',
+                              icon: 'none',
+                              duration: 2000
+                            });
+                            that.setData({
+                              wifiCloseModal:true,
+                              hiddens: true,
+                            })
+                            wx.request({
+                              url: 'https://mobile.littlehotspot.com/Smallappsimple/Index/recordWifiErr',
+                              headers: {
+                                'Content-Type': 'application/json'
+                              },
+
+                              method: "POST",
+                              data: {
+                                err_info: '{"errMs":"请打开您的wifi"}',
+                                box_mac: box_mac
+                              }
+                            })
+                          }else {
+                            
+                            
+                            for (var j = 0; j < 1; j++) {
+                              var rt = app.linkHotelWifi(box_mac,wifi_mac, wifi_name, use_wifi_password,that,1);
+                              
+                            }
+                            
+                          }
+
+                        } else if (res.system.indexOf("iOS")>-1){//ios手机
+                          
+                          for (var j = 0; j < 1; j++) {
+                            var rt = app.linkHotelWifi(box_mac,wifi_mac, wifi_name, use_wifi_password, that, 2);
+                           
+                          }
+                          
+                        }
+                      }
+                    })
+
+                    // for(var j=0; j<3;j++){
+                    //   var rt = app.linkHotelWifi();
+                    //   console.log(rt);
+                    // }
+                    //app.connectHotelwifi(openid, wifi_mac, wifi_name, use_wifi_password, intranet_ip, that)
                   }
                 }
               }
