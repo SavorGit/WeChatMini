@@ -38,21 +38,78 @@ Page({
   },
   onLoad: function (e) {
     //this.setData({ showRetryModal: true});
+
+    wx.hideShareMenu();
     var that = this;
-    var scene = decodeURIComponent(e.scene);
+    
     
     that.setData({
       common_appid: common_appid,
       rest_appid: rest_appid,
     })
-    if (scene != 'undefined' ){//扫小程序码过来 
+    if ( typeof(e.scene) != 'undefined' ){//扫小程序码过来 
+      var scene = decodeURIComponent(e.scene);
       var scene_arr = scene.split('_');
       box_mac = scene_arr[0];
       type    = scene_arr[1];  
       if (typeof (type) =='undefined'){
         type = 6;
       }
-      //box_mac = '00226D655202'
+      if (box_mac == undefined || box_mac == 'undefined' || box_mac == '') {
+        that.setData({
+          is_view_rest: 0,
+          showModal: true
+        })
+      }else {
+        linkHotelWif(box_mac, type);
+      }
+      
+    } else if (typeof (e.q) !='undefined'){//扫二维码过来
+      var q = decodeURIComponent(e.q);
+      var selemite = q.indexOf("?");
+      var scene = q.substring(selemite + 3, q.length);
+      wx.request({
+        url: 'https://mobile.littlehotspot.com/smallappsimple/index/getQrcontent',
+        header: {
+          'content-type': 'application/json'
+        },
+        data:{
+          content:scene
+        },
+        success:function(res){
+          if(res.data.code==10000){
+            var content = res.data.result.content;
+            var content_arr = content.split('_');
+            box_mac = content_arr[0];
+            type = content_arr[1];
+            linkHotelWif(box_mac, type);
+          }else {
+            wx.showToast({
+              title: '二维码异常',
+              icon: 'none',
+              duration: 2000
+            });
+            that.setData({
+              is_view_rest: 0,
+              showModal: true
+            })
+          }
+        },
+        fail:function(res){
+          wx.showToast({
+            title: '二维码异常',
+            icon: 'none',
+            duration: 2000
+          });
+          that.setData({
+            is_view_rest: 0,
+            showModal: true
+          })
+        }
+
+      })
+ 
+
     }else {//小程序跳转过来
       
       box_mac = e.box_mac
@@ -62,27 +119,39 @@ Page({
       // box_mac = '00226D5846EA'//A1
       //box_mac ='00226D65522A'
       //box_mac = '00226D655662'
+      if (box_mac == undefined || box_mac == 'undefined' || box_mac == '') {
+        that.setData({
+          is_view_rest: 0,
+          showModal: true
+        })
+      }else {
+        linkHotelWif(box_mac, type);
+      }
+      
     }
-    if (box_mac == undefined || box_mac =='undefined' || box_mac=='' ){
+    /*if (box_mac == undefined || box_mac =='undefined' || box_mac=='' ){
       that.setData({
         is_view_rest:0,
         showModal:true
       })
     }else {
       
+      
+    }*/
+    
+    function linkHotelWif(box_mac,type){
       that.setData({
         box_mac: box_mac,
-        hiddens:false,
+        hiddens: false,
       })
-      wx.hideShareMenu();
 
       if (app.globalData.openid && app.globalData.openid != '') {
-        
+
         that.setData({
           openid: app.globalData.openid
         })
         openid = app.globalData.openid;
-        
+
         //扫码埋点
 
         wx.request({
@@ -124,14 +193,13 @@ Page({
       } else {
         app.openidCallback = openid => {
           if (openid != '') {
-            
+
             that.setData({
               openid: openid
             })
             openid = openid;
-            
             //扫码埋点
-            
+
             wx.request({
               url: 'https://mobile.littlehotspot.com/smallapp21/index/recOverQrcodeLog',
               data: {
@@ -145,174 +213,153 @@ Page({
               },
             })
           }
-            
-            
-            //判断用户是否注册
-            wx.request({
-              url: 'https://mobile.littlehotspot.com/smallappsimple/User/isJjRegister',
-              data: {
-                "openid": openid,
-              },
-              header: {
-                'content-type': 'application/json'
-              },
-              success: function (res) {
-                wx.setStorage({
-                  key: 'savor_user_info',
-                  data: res.data.result.userinfo,
-                })
-              },
-              fail: function (e) {
-                wx.setStorage({
-                  key: 'savor_user_info',
-                  data: { 'openid': openid },
-                })
-              }
-            });//判断用户是否注册结束
-            getHotelInfo(box_mac,openid);
-          }
+          //判断用户是否注册
+          wx.request({
+            url: 'https://mobile.littlehotspot.com/smallappsimple/User/isJjRegister',
+            data: {
+              "openid": openid,
+            },
+            header: {
+              'content-type': 'application/json'
+            },
+            success: function (res) {
+              wx.setStorage({
+                key: 'savor_user_info',
+                data: res.data.result.userinfo,
+              })
+            },
+            fail: function (e) {
+              wx.setStorage({
+                key: 'savor_user_info',
+                data: { 'openid': openid },
+              })
+            }
+          });//判断用户是否注册结束
+          getHotelInfo(box_mac, openid);
         }
       }
+    }
+    function getHotelInfo(box_mac, openid) {//获取链接的酒楼信息
       
-      function getHotelInfo(box_mac,openid) {//获取链接的酒楼信息
-        
-        wx.request({
-          url: 'https://mobile.littlehotspot.com/Smallappsimple/Index/getHotelInfo',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          data: {
-            box_mac: box_mac,
-            
-          },
-          method: "POST",
-          success: function (res) {
-            if (res.data.code == 10000) {
-              intranet_ip = res.data.result.intranet_ip;
-              wifi_name = res.data.result.wifi_name;
-              wifi_password = res.data.result.wifi_password;
-              use_wifi_password = wifi_password
+      wx.request({
+        url: 'https://mobile.littlehotspot.com/Smallappsimple/Index/getHotelInfo',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: {
+          box_mac: box_mac,
 
-              if (wifi_name == '' || wifi_mac==''){
+        },
+        method: "POST",
+        success: function (res) {
+          if (res.data.code == 10000) {
+            intranet_ip = res.data.result.intranet_ip;
+            wifi_name = res.data.result.wifi_name;
+            wifi_password = res.data.result.wifi_password;
+            use_wifi_password = wifi_password
+
+            if (wifi_name == '' || wifi_mac == '') {
+              that.setData({
+                is_view_rest: 0,
+                hiddens: true,
+                showRetryModal: true
+              })
+            } else {
+              that.setData({
+                is_link: 1,
+              })
+
+
+              if (wifi_password == '') {
+                wifi_password = "未设置wifi密码";
+              }
+              wifi_mac = res.data.result.wifi_mac;
+
+              if (wifi_mac == '') {//如果后台未填写wifi_mac  获取wifi列表自动链接
                 that.setData({
-                  is_view_rest :0,
-                  hiddens:true,
-                  showRetryModal:true
+                  hotel_name: res.data.result.hotel_name,
+                  room_name: res.data.result.room_name,
+                  wifi_name: wifi_name,
+                  wifi_password: wifi_password,
+                  use_wifi_password: use_wifi_password,
+                  intranet_ip: intranet_ip,
+                  openid: openid,
                 })
-              }else {
+              } else {//如果后台填写了wifi_mac直接链接
                 that.setData({
-                  is_link: 1,
+                  hotel_name: res.data.result.hotel_name,
+                  room_name: res.data.result.room_name,
+                  wifi_name: wifi_name,
+                  wifi_password: wifi_password,
+                  use_wifi_password: use_wifi_password,
+                  intranet_ip: intranet_ip,
+                  openid: openid
                 })
-                
+                var user_info = wx.getStorageSync("savor_user_info");
 
-                if (wifi_password == '') {
-                  wifi_password = "未设置wifi密码";
-                }
-                wifi_mac = res.data.result.wifi_mac;
-
-                if (wifi_mac == '') {//如果后台未填写wifi_mac  获取wifi列表自动链接
+                if (user_info.is_wx_auth != 3) {
                   that.setData({
-                    hotel_name: res.data.result.hotel_name,
-                    room_name: res.data.result.room_name,
-                    wifi_name: wifi_name,
-                    wifi_password: wifi_password,
-                    use_wifi_password: use_wifi_password,
-                    intranet_ip: intranet_ip,
-                    openid: openid,
+                    hiddens: true,
+                    wifi_mac: res.data.result.wifi_mac,
+                    showWXAuthLogin: true
                   })
-                } else {//如果后台填写了wifi_mac直接链接
+                } else {
                   that.setData({
-                    hotel_name: res.data.result.hotel_name,
-                    room_name: res.data.result.room_name,
-                    wifi_name: wifi_name,
-                    wifi_password: wifi_password,
-                    use_wifi_password: use_wifi_password,
-                    intranet_ip: intranet_ip,
-                    openid: openid
+                    hiddens: false,
                   })
-                  var user_info = wx.getStorageSync("savor_user_info");
-                  
-                  if (user_info.is_wx_auth != 3) {
-                    that.setData({
-                      hiddens:true,
-                      wifi_mac: res.data.result.wifi_mac,
-                      showWXAuthLogin: true
-                    })
-                  } else {
-                    
-                    that.setData({
-                      hiddens: false,
-                    })
-                    wx.getSystemInfo({
-                      success: function (res) {
-                        if (res.system.indexOf("Android") > -1) {//安卓手机
-                          if (res.wifiEnabled==false){
-                            wx.showToast({
-                              title: '请打开您的wifi',
-                              icon: 'none',
-                              duration: 2000
-                            });
-                            that.setData({
-                              wifiCloseModal:true,
-                              hiddens: true,
-                            })
-                            wx.request({
-                              url: 'https://mobile.littlehotspot.com/Smallappsimple/Index/recordWifiErr',
-                              headers: {
-                                'Content-Type': 'application/json'
-                              },
+                  wx.getSystemInfo({
+                    success: function (res) {
+                      if (res.system.indexOf("Android") > -1) {//安卓手机
+                        if (res.wifiEnabled == false) {
+                          wx.showToast({
+                            title: '请打开您的wifi',
+                            icon: 'none',
+                            duration: 2000
+                          });
+                          that.setData({
+                            wifiCloseModal: true,
+                            hiddens: true,
+                          })
+                          wx.request({
+                            url: 'https://mobile.littlehotspot.com/Smallappsimple/Index/recordWifiErr',
+                            headers: {
+                              'Content-Type': 'application/json'
+                            },
 
-                              method: "POST",
-                              data: {
-                                err_info: '{"errMs":"请打开您的wifi"}',
-                                box_mac: box_mac
-                              }
-                            })
-                          }else {
-                            
-                            
-                            for (var j = 0; j < 1; j++) {
-                              var rt = app.linkHotelWifi(box_mac,wifi_mac, wifi_name, use_wifi_password,that,1);
-                              
+                            method: "POST",
+                            data: {
+                              err_info: '{"errMs":"请打开您的wifi"}',
+                              box_mac: box_mac
                             }
-                            
-                          }
-
-                        } else if (res.system.indexOf("iOS")>-1){//ios手机
-                          
+                          })
+                        } else {
                           for (var j = 0; j < 1; j++) {
-                            var rt = app.linkHotelWifi(box_mac,wifi_mac, wifi_name, use_wifi_password, that, 2);
-                           
+                            var rt = app.linkHotelWifi(box_mac, wifi_mac, wifi_name, use_wifi_password, that, 1);
                           }
-                          
+                        }
+                      } else if (res.system.indexOf("iOS") > -1) {//ios手机
+
+                        for (var j = 0; j < 1; j++) {
+                          var rt = app.linkHotelWifi(box_mac, wifi_mac, wifi_name, use_wifi_password, that, 2);
+
                         }
                       }
-                    })
-
-                    // for(var j=0; j<3;j++){
-                    //   var rt = app.linkHotelWifi();
-                    //   console.log(rt);
-                    // }
-                    //app.connectHotelwifi(openid, wifi_mac, wifi_name, use_wifi_password, intranet_ip, that)
-                  }
+                    }
+                  })
                 }
               }
-
-              
-            } else {//未获取到酒楼信息
-              wx.showToast({
-                title: '该电视暂不支持小程序投屏',
-                icon: 'none',
-                duration: 2000
-              });
             }
-
+          } else {//未获取到酒楼信息
+            wx.showToast({
+              title: '该电视暂不支持小程序投屏',
+              icon: 'none',
+              duration: 2000
+            });
           }
-        })
-      }
-      
-  
-      
+
+        }
+      })
+    }
     
     
   },

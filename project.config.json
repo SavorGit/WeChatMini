@@ -13,7 +13,7 @@
 		"checkInvalidKey": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.4.2",
+	"libVersion": "2.7.1",
 	"appid": "wx7883a4327329a67c",
 	"projectname": "savor_xcx_jijian",
 	"debugOptions": {
