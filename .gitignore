@@ -1,0 +1,7 @@
+private.wx7883a4327329a67c.key
+project.private.config.json
+project.private.config.json.*
+.gitignore
+test
+test/*
+components/modal/BulletChat.*
