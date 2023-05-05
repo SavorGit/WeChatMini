@@ -79,12 +79,13 @@ if (type == 'publish') {
 if (typeof (notifyRobotWebHook) === 'string' && notifyRobotWebHook.trim().length > 1) {
   (async () => {
     try {
-      // const imageData = fs.readFileSync(previewPath);
-      // const hash = md5File.sync(previewPath)
-      // const imageBase64 = imageData.toString("base64");
-      // await sendQrCode(imageBase64, hash);
-      const sendNoticeResult = await sendNoticeToWeChartGroup(notifyRobotWebHook, previewPath);
+      const imageData = await fs.readFileSync(previewPath);
+      const hash = md5File.sync(previewPath)
+      const imageBase64 = imageData.toString("base64");
+      const sendNoticeResult = await sendQrCode(imageBase64, hash);
       console.log(sendNoticeResult);
+      // const sendNoticeResult = await sendNoticeToWeChartGroup(notifyRobotWebHook, previewPath);
+      // console.log(sendNoticeResult);
     } catch (e) {
       console.error(e);
       process.exit(1);
@@ -121,9 +122,9 @@ function sendQrCode(url, imageBase64, hash) {
   });
 }
 
-function sendNoticeToWeChartGroup(url, picPath) {
-  const imageData = fs.readFileSync(picPath);
-  const hash = md5File.sync(picPath)
-  const imageBase64 = imageData.toString("base64");
-  return sendQrCode(url, imageBase64, hash);
-}
+// function sendNoticeToWeChartGroup(url, picPath) {
+//   const imageData = fs.readFileSync(picPath);
+//   const hash = md5File.sync(picPath)
+//   const imageBase64 = imageData.toString("base64");
+//   return sendQrCode(url, imageBase64, hash);
+// }
