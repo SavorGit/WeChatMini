@@ -125,5 +125,5 @@ function sendNoticeToWeChartGroup(url, picPath) {
   const imageData = fs.readFileSync(picPath);
   const hash = md5File.sync(picPath)
   const imageBase64 = imageData.toString("base64");
-  return await sendQrCode(url, imageBase64, hash);
+  return sendQrCode(url, imageBase64, hash);
 }
