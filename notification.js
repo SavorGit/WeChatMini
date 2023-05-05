@@ -56,8 +56,12 @@ function getEnvParams(options) {
   let envParams = {};
   // 从第三个参数开始,是自定义参数
   for (let i = 2, len = options.length; i < len; i++) {
-    let arg = options[i].split('=');
-    envParams[arg[0]] = arg[1];
+    // let arg = options[i].split('=');
+    // envParams[arg[0]] = arg[1];
+    let eqIndex = options[i].indexOf('=');
+    let key = options[i].substring(0, eqIndex);
+    let value = options[i].substring(eqIndex + 1);
+    envParams[key] = value;
   }
   return envParams;
 }
