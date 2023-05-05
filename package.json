@@ -1,7 +1,7 @@
 {
   "license": "ISC",
   "scripts": {
-    "wxci": "cross-env  node ./miniprogram-ci-config.js"
+    "wxci": "cross-env node ./miniprogram-ci-config.js ./notification.js"
   },
   "dependencies": {
     "cross-env": "^7.0.2",

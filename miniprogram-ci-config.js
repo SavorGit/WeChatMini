@@ -77,21 +77,21 @@ if (type == 'publish') {
   })();
 }
 
-// 向企业微信群发通知
-if (typeof (notifyRobotWebHook) === 'string' && notifyRobotWebHook.trim().length > 1) {
-  (async () => {
-    try {
-      const imageData = await fs.readFileSync(previewPath);
-      const hash = md5File.sync(previewPath)
-      const imageBase64 = imageData.toString("base64");
-      const sendNoticeResult = await sendQrCode(imageBase64, hash);
-      console.log(sendNoticeResult);
-    } catch (e) {
-      console.error(e);
-      process.exit(1);
-    }
-  })();
-}
+// // 向企业微信群发通知
+// if (typeof (notifyRobotWebHook) === 'string' && notifyRobotWebHook.trim().length > 1) {
+//   (async () => {
+//     try {
+//       const imageData = await fs.readFileSync(previewPath);
+//       const hash = md5File.sync(previewPath)
+//       const imageBase64 = imageData.toString("base64");
+//       const sendNoticeResult = await sendQrCode(imageBase64, hash);
+//       console.log(sendNoticeResult);
+//     } catch (e) {
+//       console.error(e);
+//       process.exit(1);
+//     }
+//   })();
+// }
 
 /**
  * 获取node命令行参数
@@ -107,17 +107,17 @@ function getEnvParams(options) {
   return envParams;
 }
 
-function sendQrCode(url, imageBase64, hash) {
-  return axios({
-    headers: { "Content-Type": 'application/json' },
-    method: 'post',
-    url: url,
-    data: {
-      "msgtype": "image",
-      "image": {
-        "base64": imageBase64,
-        "md5": hash
-      }
-    }
-  });
-}
+// function sendQrCode(url, imageBase64, hash) {
+//   return axios({
+//     headers: { "Content-Type": 'application/json' },
+//     method: 'post',
+//     url: url,
+//     data: {
+//       "msgtype": "image",
+//       "image": {
+//         "base64": imageBase64,
+//         "md5": hash
+//       }
+//     }
+//   });
+// }
