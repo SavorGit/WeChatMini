@@ -1,5 +1,5 @@
 const ci = require('miniprogram-ci');
-const md5File = require('md5-file');
+//const md5File = require('md5-file');
 const axios = require('axios');
 const path = require('path');
 const fs = require("fs");
