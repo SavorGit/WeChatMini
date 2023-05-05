@@ -47,7 +47,8 @@ const previewPath = path.resolve(appDirectory, `./qrcode-${buildId}.jpg`);
 
 // 任何时候都生成二维码
 // (async () => {
-const previewResult = await ci.preview({
+// const previewResult = await ci.preview({
+const previewResult = ci.preview({
   project,
   desc: '预览', // 此备注将显示在“小程序助手”开发版列表中
   setting: uploadParams,
@@ -84,8 +85,6 @@ if (typeof (notifyRobotWebHook) === 'string' && notifyRobotWebHook.trim().length
       const imageBase64 = imageData.toString("base64");
       const sendNoticeResult = await sendQrCode(imageBase64, hash);
       console.log(sendNoticeResult);
-      // const sendNoticeResult = await sendNoticeToWeChartGroup(notifyRobotWebHook, previewPath);
-      // console.log(sendNoticeResult);
     } catch (e) {
       console.error(e);
       process.exit(1);
@@ -121,10 +120,3 @@ function sendQrCode(url, imageBase64, hash) {
     }
   });
 }
-
-// function sendNoticeToWeChartGroup(url, picPath) {
-//   const imageData = fs.readFileSync(picPath);
-//   const hash = md5File.sync(picPath)
-//   const imageBase64 = imageData.toString("base64");
-//   return sendQrCode(url, imageBase64, hash);
-// }
