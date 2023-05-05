@@ -1,4 +1,10 @@
 const ci = require('miniprogram-ci');
+const md5File = require('md5-file');
+const axios = require('axios');
+const path = require('path');
+const fs = require("fs");
+const appDirectory = fs.realpathSync(process.cwd());
+
 
 /**
  * 获取环境参数
@@ -8,7 +14,7 @@ const ci = require('miniprogram-ci');
  * appid:应用id,测试人员有时需要切换应用Id
  * buildId: 构建id
  */
-const { type, version = '', desc = '', appid = '', buildId = '' } = getEnvParams(process.argv);
+const { type, version = '', desc = '', appid = '', buildId = '', notifyRobotWebHook = '' } = getEnvParams(process.argv);
 
 console.log(process.argv);
 
@@ -37,6 +43,7 @@ const uploadParams = {
 };
 
 const project = new ci.Project({ ...reqParams });
+const previewPath = path.resolve(appDirectory, `./qrcode-${buildId}.jpg`);
 
 // 任何时候都生成二维码
 (async () => {
@@ -45,7 +52,8 @@ const project = new ci.Project({ ...reqParams });
     desc: '预览', // 此备注将显示在“小程序助手”开发版列表中
     setting: uploadParams,
     qrcodeFormat: 'image',
-    qrcodeOutputDest: `./qrcode-${buildId}.jpg`,
+    //qrcodeOutputDest: `./qrcode-${buildId}.jpg`,
+    qrcodeOutputDest: previewPath,
     onProgressUpdate: console.log,
     // pagePath: 'pages/index/index', // 预览页面
     // searchQuery: 'a=1&b=2',  // 预览参数 [注意!]这里的`&`字符在命令行中应写成转义字符`\&`
@@ -53,6 +61,7 @@ const project = new ci.Project({ ...reqParams });
   console.log(previewResult);
 })();
 
+// 发布到体验版
 if (type == 'publish') {
   (async () => {
     const uploadResult = await ci.upload({
@@ -63,6 +72,21 @@ if (type == 'publish') {
       onProgressUpdate: console.log,
     });
     console.log(uploadResult);
+  })();
+}
+
+// 向企业微信群发通知
+if (typeof (notifyRobotWebHook) === 'string' && notifyRobotWebHook.trim().length > 1) {
+  (async () => {
+    try {
+      const imageData = fs.readFileSync(previewPath);
+      const hash = md5File.sync(previewPath)
+      const imageBase64 = imageData.toString("base64");
+      await sendQrCode(imageBase64, hash);
+    } catch (e) {
+      console.error(e);
+      process.exit(1);
+    }
   })();
 }
 
@@ -78,4 +102,19 @@ function getEnvParams(options) {
     envParams[arg[0]] = arg[1];
   }
   return envParams;
+}
+
+function sendQrCode(imageBase64, hash) {
+  return axios({
+    headers: { "Content-Type": 'application/json' },
+    method: 'post',
+    url: argv.u,
+    data: {
+      "msgtype": "image",
+      "image": {
+        "base64": imageBase64,
+        "md5": hash
+      }
+    }
+  });
 }
