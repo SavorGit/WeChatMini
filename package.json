@@ -1,4 +1,5 @@
 {
+  "license": "ISC",
   "scripts": {
     "wxci": "cross-env  node ./miniprogram-ci-config.js"
   },
