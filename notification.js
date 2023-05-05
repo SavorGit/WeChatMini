@@ -8,20 +8,12 @@ const appDirectory = fs.realpathSync(process.cwd());
 
 /**
  * 获取环境参数
- * type 操作类型 preview | publish
- * version:版本号 上传操作必填
- * desc:版本描述  上传操作必填
- * appid:应用id,测试人员有时需要切换应用Id
  * buildId: 构建id
+ * notifyRobotWebHook: 企业群聊机器人的WebHook
  */
-const { appid = '', buildId = '', notifyRobotWebHook = '' } = getEnvParams(process.argv);
+const { buildId = '', notifyRobotWebHook = '' } = getEnvParams(process.argv);
 
 console.log(process.argv);
-
-if (!appid || typeof (appid) !== 'string' || appid.trim().length < 1) {
-  console.error('appid不能为空!!!');
-  process.exit(1);
-}
 
 const previewPath = path.resolve(appDirectory, `./qrcode-${buildId}.jpg`);
 
@@ -32,7 +24,7 @@ if (typeof (notifyRobotWebHook) === 'string' && notifyRobotWebHook.trim().length
       const imageData = fs.readFileSync(previewPath);
       const hash = md5File.sync(previewPath)
       const imageBase64 = imageData.toString("base64");
-      const sendNoticeResult = await sendQrCode(imageBase64, hash);
+      const sendNoticeResult = await sendQrCode(notifyRobotWebHook, imageBase64, hash);
       console.log(sendNoticeResult);
     } catch (e) {
       console.error(e);
