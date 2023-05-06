@@ -20,6 +20,7 @@ if (!appid || typeof (appid) !== 'string' || appid.trim().length < 1) {
   console.error('appid不能为空!!!');
   process.exit(1);
 }
+
 // 微信小程序的私有key文件存储路径,每次新增appid时,需要找运维加私有key
 const privateKeyPath = `/var/lib/jenkins/cert/private.${appid}.key`;
 
@@ -31,6 +32,7 @@ const reqParams = {
   privateKeyPath,
   ignores: ['node_modules/**/*', 'yarn.lock', '.*'],
 };
+
 // 上传文件处理设置参数
 const uploadParams = {
   es6: true, //  "es6 转 es5"
@@ -50,7 +52,6 @@ const previewPath = path.resolve(appDirectory, `./qrcode-${buildId}.jpg`);
     desc: '预览', // 此备注将显示在“小程序助手”开发版列表中
     setting: uploadParams,
     qrcodeFormat: 'image',
-    //qrcodeOutputDest: `./qrcode-${buildId}.jpg`,
     qrcodeOutputDest: previewPath,
     onProgressUpdate: console.log,
     // pagePath: 'pages/index/index', // 预览页面
@@ -75,7 +76,8 @@ if (type == 'publish') {
 
 /**
  * 获取node命令行参数
- * @param {array} options 命令行数组
+ * @param {Array} options 命令行数组
+ * @returns {Object} 参数对象
  */
 function getEnvParams(options) {
   let envParams = {};
