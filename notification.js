@@ -71,8 +71,8 @@ function sendText(url, content) {
       "msgtype": "text",
       "text": {
         "content": content,
-        "mentioned_list": ["zhengweimmv", "wxid_slup07950kd822", "@all"],
-        "mentioned_mobile_list": ["18611368229", "@all"]
+        "mentioned_list": ["@all"],
+        // "mentioned_mobile_list": ["18611368229", "@all"]
       }
     }
   });
