@@ -48,7 +48,7 @@
     }
   },
   "compileType": "miniprogram",
-  "libVersion": "2.8.3",
+  "libVersion": "2.33.0",
   "appid": "wx7883a4327329a67c",
   "projectname": "savor_xcx_jijian",
   "simulatorType": "wechat",
